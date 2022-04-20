@@ -4,6 +4,7 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
 import java.nio.*;
+import java.util.Random;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -47,7 +48,7 @@ public class HelloGL {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(1080, 720, "Hello World!", NULL, NULL);
         if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -93,16 +94,15 @@ public class HelloGL {
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
-
         // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-
+            /*
             glBegin(GL_LINE_STRIP);
             glColor3f(0.0f, 0.0f, 0.0f);
             //glVertex2f(0.0f, 0.0f);
@@ -127,19 +127,36 @@ public class HelloGL {
             glVertex2f(0.5f, 0.0f);
             glVertex2f(-0.5f, -0.5f);
             glEnd();
-            */
+
             glBegin(GL_TRIANGLES);
             glVertex2f(-0.5f, -0.5f);
             glVertex2f(0.0f, 0.5f);
             glVertex2f(0.5f, 0.0f);
 
             glEnd();
+
+            glBegin(GL_TRIANGLES);
+            glVertex2f(-0.5f, -0.5f);
+            glVertex2f(0.0f, 0.5f);
+            Random rand = new Random();
+            float leftLimit = 0.0f;
+            float rightLimit = 1.0f;
+            float generatedLong = leftLimit + (float) (Math.random() * (rightLimit - leftLimit));
+            if ((rand.nextBoolean())) {
+                glVertex2f(0.5f, generatedLong);
+            } else {
+                glVertex2f(0.8f, generatedLong);
+            }
+            glEnd();
+*/
+
+
             glfwSwapBuffers(window); // swap the color buffers
 
 
             double currentTime = glfwGetTime();
             image++;
-            if (currentTime - lastTime > 1.0){
+            if (currentTime - lastTime > 1.0) {
                 System.out.println(image);
                 lastTime = currentTime;
                 image = 0;
@@ -153,5 +170,6 @@ public class HelloGL {
     public static void main(String[] args) {
         new HelloGL().run();
     }
+
 
 }

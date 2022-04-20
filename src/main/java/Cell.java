@@ -1,4 +1,5 @@
-public class Cell {
+
+public class Cell { // не используется, скорее всего удалится
     int x;
     int y;
     int isSnakeHere;
@@ -23,7 +24,7 @@ public class Cell {
             // return wall;
         } else if (this.isSnakeHere == 2) {
             //return emptyCell;
-        } else if (this.isSnakeHere >2){
+        } else if (this.isSnakeHere > 2) {
             // return bodyOfSnake
         }
     }
