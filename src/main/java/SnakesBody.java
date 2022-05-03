@@ -1,3 +1,4 @@
+import org.jetbrains.annotations.NotNull;
 
 public class SnakesBody { // это не используем
     int x;
@@ -15,4 +16,8 @@ public class SnakesBody { // это не используем
         this.y = newY;
     }
 
+    public boolean equalsXY(@NotNull SnakesBody another) {
+        if (x != another.x) return false;
+        return y == another.y;
+    }
 }

@@ -17,7 +17,7 @@ public class Wall {
         System.out.println(x1 + " " + y1 + " " + x2 + " " + y2 + " ");
     }
 
-    private static @NotNull Wall newRandomWallForGrid(int gridHeight, int gridWidth) {
+    public static @NotNull Wall newRandomWallForGrid(int gridHeight, int gridWidth) {
         Random random = new Random();
         boolean b = random.nextBoolean();
         int x = random.nextInt(gridWidth);
