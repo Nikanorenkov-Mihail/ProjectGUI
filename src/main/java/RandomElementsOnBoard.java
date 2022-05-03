@@ -1,3 +1,4 @@
+/*
 import java.util.LinkedList;
 
 public class RandomElementsOnBoard { // нужен ли отдельный класс
@@ -8,13 +9,13 @@ public class RandomElementsOnBoard { // нужен ли отдельный кл�
         return Math.round(parametr * (float) Math.pow(10, 2)) / (float) Math.pow(10, 2);
     }
 
-    public void addRandomBonus() {
-        this.bonusesRandom.add(new Bonus(0, 0).newRandomBonus());
-    }
+   // public void addRandomBonus() {
+     //   this.bonusesRandom.add(new Bonus(0, 0, 1).newRandomBonus(gridHight, gridWight));
+    //}
 
-    public void addRandomWall() {
-        this.wallsRandom.add(new Wall(0, 0, 0, 0).newRandomWall());
-    }
+    //public void addRandomWall() {
+    //    this.wallsRandom.add(new Wall(0, 0, 0, 0).newRandomWall());
+    //}
 
 
     public boolean isWall(float x, float y) {
@@ -36,3 +37,4 @@ public class RandomElementsOnBoard { // нужен ли отдельный кл�
     }
 
 }
+*/

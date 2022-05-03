@@ -1,34 +1,42 @@
 
 import org.jetbrains.annotations.NotNull;
 
-public class Bonus {
-    float x;
-    float y;
+import java.util.Random;
 
-    Bonus(float x, float y) {
+public class Bonus {
+    int x;
+    int y;
+    double radius = 0.7;
+
+    Bonus(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    private float toRightFloat(float parametr) {
-        return Math.round(parametr * (float) Math.pow(10, 2)) / (float) Math.pow(10, 2);
+    public int bonusX() {
+        return this.x;
+    }
+    public int bonusY() {
+        return this.y;
     }
 
-    public Bonus newRandomBonus() {
-        float leftLimit = -1.0f;
-        float rightLimit = 1.0f;
-        float x1 = leftLimit + (float) (Math.random() * (rightLimit - leftLimit));
-        float y1 = leftLimit + (float) (Math.random() * (rightLimit - leftLimit));
 
-        return new Bonus(toRightFloat(x1), toRightFloat(y1));
+    public Bonus newRandomBonus(int gridHeight, int gridWidth) {
+        Random random = new Random();
+        int x = random.nextInt(gridWidth);
+        int y = random.nextInt(gridHeight);
+
+        return new Bonus(x, y);
     }
 
-    public boolean equals(@NotNull Bonus another) {
-        return this.x == another.x && this.y == another.y;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bonus bonus = (Bonus) o;
+        if (x != bonus.x) return false;
+        return y == bonus.y;
     }
 
-    public static void main(String[] args) {
-        Bonus n1 = new Bonus(1, 2);
-        n1.newRandomBonus();
-    }
 }

@@ -1,42 +1,52 @@
+
 import org.jetbrains.annotations.NotNull;
 
-public class Wall {
-    float x1;
-    float y1;
-    float x2;
-    float y2;
+import java.util.Random;
 
-    Wall(float x1, float y1, float x2, float y2) {
+public class Wall {
+    int x1;
+    int y1;
+    int x2;
+    int y2;
+
+    Wall(int x1, int y1, int x2, int y2) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        System.out.println(x1 + " " + y1 + " " + x2 + " " + y2 + " ");
     }
 
-    private float toRightFloat(float parametr) {
-        return Math.round(parametr * (float) Math.pow(10, 2)) / (float) Math.pow(10, 2);
+    private static @NotNull Wall newRandomWallForGrid(int gridHeight, int gridWidth) {
+        Random random = new Random();
+        boolean b = random.nextBoolean();
+        int x = random.nextInt(gridWidth);
+        int y = random.nextInt(gridHeight);
+        return new Wall(
+                x,
+                y,
+                x + (b ? 0 : random.nextInt(10)),
+                y + (!b ? 0 : random.nextInt(10))
+        );
     }
 
-    public Wall newRandomWall() {
-        float leftLimit = -1.0f;
-        float rightLimit = 1.0f;
-        float x1 = (float) (leftLimit + (Math.random() * (rightLimit - leftLimit)));
-        float y1 = (float) (leftLimit + (Math.random() * (rightLimit - leftLimit)));
-        float x2 = (float) ((1 - Math.abs(x1) < 1 - Math.abs(y1)) ? x1 : (1 - Math.abs(x1)) / (1 + (Math.random() * (3 - 1))));
-        float y2 = (float) ((1 - Math.abs(y1) < 1 - Math.abs(x1)) ? y1 : (1 - Math.abs(y1)) / (1 + (Math.random() * (3 - 1))));
-        //               какая точка дальше от стены по своей оси, от той точки пойдет стена вверх или направо
-        //               стена может быть в 1/2/3 (примерно) раза меньше расстояния
+    public static Wall @NotNull [] newRandomWallsForGrid(int gridHeight, int gridWidth, int size) {
+        Wall[] walls = new Wall[size];
+        if (size != 0){ for (int i = 0; i < size; i++) walls[i] = newRandomWallForGrid(gridHeight, gridWidth);}
 
-        return new Wall(toRightFloat(x1), toRightFloat(y1), toRightFloat(x2), toRightFloat(y2));
+        return walls;
     }
 
-    public boolean equals(@NotNull Wall another) {
-        return this.x1 == another.x1 && this.x2 == another.x2 && this.y1 == another.y1 && this.y2 == another.y2;
-    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    public static void main(String[] args) {
-        Bonus n1 = new Bonus(1, 2);
-        n1.newRandomBonus();
+        Wall wall = (Wall) o;
 
+        if (x1 != wall.x1) return false;
+        if (y1 != wall.y1) return false;
+        if (x2 != wall.x2) return false;
+        return y2 == wall.y2;
     }
 }

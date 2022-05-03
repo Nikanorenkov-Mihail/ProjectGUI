@@ -1,111 +1,96 @@
 
+import org.jetbrains.annotations.NotNull;
+
+import static java.lang.Math.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GlDraw {
+    private int gridHeight, gridWidth;
 
-    public void wallsLevels(int level) {
-        /*
-        int leftLimit = -1;
-        int rightLimit = 1;
-        float x = (float) (leftLimit + (Math.random() * (rightLimit - leftLimit)));
-        float y = (float) leftLimit + (float) (Math.random() * (rightLimit - leftLimit));
-        float x2 = (float) ((1 - Math.abs(x) < 1 - Math.abs(y)) ? x : (1 - Math.abs(x)) / (1 + (Math.random() * (3 - 1))));
-        float y2 = (float) ((1 - Math.abs(y) < 1 - Math.abs(x)) ? y : (1 - Math.abs(y)) / (1 + (Math.random() * (3 - 1))));
-
-        //               какая точка дальше от стены по своей оси, от той точки пойдет стена вверх или направо
-        //               стена может быть в 1/2/3 (примерно) раза меньше расстояния
-
-        float scale = (float) Math.pow(10, 2); // округление
-        y = Math.round(y * scale) / scale;
-        x = Math.round(x * scale) / scale;
-        y2 = Math.round(y2 * scale) / scale;
-        x2 = Math.round(x2 * scale) / scale;
-
-        glBegin(GL_LINES);
-        glColor3f(1, 1, 1);
-        glVertex2f(x, y);
-        glVertex2f(x2, y2);
-        glEnd();
-
-         */
-
-        if (level == 1) {
-            glBegin(GL_LINES);
-            glColor3f(1, 1, 1);
-            glVertex2f(0.3f, 0);
-            glVertex2f(0.3f, 0.6f);
-
-            glVertex2f(-0.5f, 0);
-            glVertex2f(-0.5f, -0.6f);
-
-
-            glEnd();
-        } else if (level == 2) {
-            glBegin(GL_LINES);
-            glColor3f(1, 1, 1);
-            glVertex2f(0.3f, 0);
-            glVertex2f(0.3f, 0.6f);
-
-            glVertex2f(-0.3f, 0);
-            glVertex2f(-0.3f, -0.6f);
-
-            glVertex2f(0.9f, -0.9f);
-            glVertex2f(0.2f, -0.9f);
-            glEnd();
-        } else if (level == 3) {
-            glBegin(GL_LINES);
-            glColor3f(1, 1, 1);
-            glVertex2f(-0.8f, 0.9f);
-            glVertex2f(-0.4f, 0.9f);
-
-            glVertex2f(-0.7f, 0.5f);
-            glVertex2f(-0.3f, 0.5f);
-
-            glVertex2f(0.4f, 0.9f);
-            glVertex2f(0.4f, 0.2f);
-
-            glVertex2f(-0.4f, -0.7f);
-            glVertex2f(0.3f, -0.7f);
-
-            glEnd();
-        } else if (level == 4) {
-            glBegin(GL_LINES);
-            glColor3f(1, 1, 1);
-            glVertex2f(-0.8f, 0.9f);
-            glVertex2f(-0.4f, 0.9f);
-
-            glVertex2f(-0.7f, 0.5f);
-            glVertex2f(-0.3f, 0.5f);
-
-            glVertex2f(0.4f, 0.9f);
-            glVertex2f(0.4f, 0.2f);
-
-            glVertex2f(-0.4f, -0.7f);
-            glVertex2f(0.3f, -0.7f);
-
-            glVertex2f(0, 0.2f);
-            glVertex2f(0, -0.3f);
-
-            glEnd();
-        } else throw new IllegalArgumentException("Wrong level");
-
-
+    GlDraw(int gridHeight, int gridWidth) {
+        this.gridHeight = gridHeight;
+        this.gridWidth = gridWidth;
     }
 
-    public void drawLines() {// функция, которая отрисовывает линии
+    private float convertX(int x) {
+        return -1.0f + 1.0f / (float) gridWidth * x * 2;
+    }
+
+    private float convertY(int y) {
+        return -1.0f + 1.0f / (float) gridHeight * y * 2;
+    }
+
+    private float convertDoubleX(double x) {
+        return (float) (-1.0f + 1.0f / (double) gridWidth * x * 2);
+    }
+
+    private float convertDoubleY(double y) {
+        return (float) (-1.0f + 1.0f / (double) gridHeight * y * 2);
+    }
+
+    public void drawWalls(Wall @NotNull [] walls) {
+        glColor3f(0.0f, 0.0f, 1.0f);
         glBegin(GL_LINES);
-        glColor3f(1.0f, 0.0f, 0.0f);
-        for (float i = -1.0f; i <= 1.0f; i += 0.07f) // отрисовываем линии
-        {
-            glVertex2f(i, -1.0f);
-            glVertex2f(i, 1.0f); // рисуем прямые в высоту
-            glVertex2f(-1.0f, i);
-            glVertex2f(1.0f, i); // рисуем прямые в ширину
+        for (int i = 0; i < walls.length; i++) {
+            glVertex2f(convertX(walls[i].x1), convertY(walls[i].y1));
+            glVertex2f(convertX(walls[i].x2), convertY(walls[i].y2));
         }
         glEnd();
     }
 
-    public static void main(String[] args) {
-        new GlDraw().wallsLevels(2);
+    public void drawBonus(@NotNull Bonus bonus, int takt) {
+        glColor3f(1.0f, 0.0f, 0.0f);
+        int x = bonus.x;
+        int y = bonus.y;
+        double radius = bonus.radius;
+        if (takt == 0) {
+            radius -= 0.1;
+        } else if (takt <= 4) {
+            radius -= 0.2;
+        } else if (takt <= 8) {
+            radius -= 0.3;
+        } else if (takt <= 12) {
+            radius -= 0.2;
+        } else if (takt <= 16) {
+            radius -= 0.1;
+        }
+
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i <= 360; i++) {
+            double angle = PI * i / 180.0;
+            glVertex2f(convertDoubleX((x + radius * cos(angle))), convertDoubleY(((y + radius * sin(angle)))));
+        }
+        glEnd();
     }
+
+    public void drawSnake(@NotNull SnakesChanges snake) {
+        for (int i = 0; i < snake.model.arrayOfBodys.size() ; i++) {
+            glBegin(GL_LINE_LOOP);
+            glColor3f(1.0f, 0.0f, 0.0f);
+            for (int k = 0; k <= 360; k++) {
+                double angle = PI * k / 180.0;
+                glVertex2f(convertDoubleX((snake.model.arrayOfBodys.get(i).x + 0.5 * cos(angle))), convertDoubleY(((snake.model.arrayOfBodys.get(i).y + 0.5 * sin(angle)))));
+            }
+            glEnd();
+        }
+
+
+    }
+/*
+    public void drawGrid() {// функция, которая отрисовывает сетку
+        glColor3f(0.0f, 1.0f, 0.0f);
+        glBegin(GL_LINES);
+        for (int i = 0; i < gridHeight; i++) {
+            glVertex2f(convertX(0), convertY(i));
+            glVertex2f(convertX(gridWidth), convertY(i));
+        }
+        for (int j = 0; j < gridWidth; j++) {
+            glVertex2f(convertX(j), convertY(0));
+            glVertex2f(convertX(j), convertY(gridHeight));
+        }
+        glEnd();
+    }
+*/
+
+
 }

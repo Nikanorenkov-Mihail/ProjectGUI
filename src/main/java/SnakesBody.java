@@ -1,16 +1,16 @@
 
 public class SnakesBody { // это не используем
-    float x; // начальная точка
-    float y;
+    int x;
+    int y;
     // можно еще разные цвета добавить
 
 
-    SnakesBody(float x, float y) {
+    SnakesBody(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public void changePoint(float newX, float newY) {
+    public void changePoint(int newX, int newY) {
         this.x = newX;
         this.y = newY;
     }
