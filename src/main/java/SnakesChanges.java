@@ -6,6 +6,7 @@ public class SnakesChanges {
     Bonus[] masOfBonuses;
     int nowBonus = 0;
     int lastWay = 0;
+    boolean noCommands = true;
 
     public SnakesChanges(int gridWidth, int gridHeight, Wall[] masOfWalls, Bonus[] masOfBonuses) {
         this.gridWidth = gridWidth;
@@ -33,15 +34,18 @@ public class SnakesChanges {
 
     private void startPointInWall() {
         int x = model.getHeadXAndY().x;
-        int y = model.getHeadXAndY().y;
-        int y1 = model.getHeadXAndY().y + 1; // первый ход не будет в стене
+        // первые ходы не будут в стене
         for (int naVsykyiSluchay = 0; naVsykyiSluchay < 10; naVsykyiSluchay++) {
             for (int k = 0; k < masOfWalls.length; k++) {
                 if (x >= Math.min(masOfWalls[k].x1, masOfWalls[k].x2) && x <= Math.max(masOfWalls[k].x1, masOfWalls[k].x2)) {
-                    if (y >= Math.min(masOfWalls[k].y1, masOfWalls[k].y2) && y <= Math.max(masOfWalls[k].y1, masOfWalls[k].y2) || y1 >= Math.min(masOfWalls[k].y1, masOfWalls[k].y2) && y1 <= Math.max(masOfWalls[k].y1, masOfWalls[k].y2)) {
-                        masOfWalls[k] = Wall.newRandomWallForGrid(gridHeight, gridWidth);
-                        k--;
+
+                    for (int y = model.getHeadXAndY().y; y < model.getHeadXAndY().y + 3; y++) {
+                        if (y >= Math.min(masOfWalls[k].y1, masOfWalls[k].y2) && y <= Math.max(masOfWalls[k].y1, masOfWalls[k].y2)) {
+                            masOfWalls[k] = Wall.newRandomWallForGrid(gridHeight, gridWidth);
+                            k--;
+                        }
                     }
+
                 }
             }
         }
@@ -51,7 +55,7 @@ public class SnakesChanges {
 
         for (int i = 0; i < masOfWalls.length; i++) {
             if (Functions.isWallForSnake(masOfWalls[i], model.getHeadXAndY())) {
-                throw new IllegalArgumentException("Game over");
+                throw new IllegalArgumentException("Game over  Your score: " + (nowBonus + 1) * 5);
             }
         }
     }
@@ -65,83 +69,80 @@ public class SnakesChanges {
 
     }
 
-    public void newWay(int newWay) {
+    public void newWay() {
         if (masOfWalls.length == 0) {
-            way(newWay);
+            way(lastWay);
             isBonusHere();
         } else {
-            way(newWay);
+            way(lastWay);
             isWallHere();
             isBonusHere();
         }
         isNewWayNotSnake();
     }
 
- /*   public void wayWithWalls(int newWay) {
+    /*   public void wayWithWalls(int newWay) {
 
-        if (newWay == 0) { // up
-            lastWay = 0;
-            newWayForAllBodys();
+           if (newWay == 0) { // up
+               lastWay = 0;
+               newWayForAllBodys();
 
-            model.arrayOfBodys.get(0).y++;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y+1)))
-                throw new IllegalArgumentException("Game over");
-            isWallHere();
-            isBonusHere();
+               model.arrayOfBodys.get(0).y++;
+               if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y+1)))
+                   throw new IllegalArgumentException("Game over");
+               isWallHere();
+               isBonusHere();
 
-            if (model.arrayOfBodys.get(0).y > gridHeight) model.arrayOfBodys.get(0).y = 1;
-            // !!!!!!!!!!!!!! сделать проверку на стены!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        } else if (newWay == 1) { // low
-            lastWay = 1;
-            newWayForAllBodys();
-            model.arrayOfBodys.get(0).y--;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y-1)))
-                throw new IllegalArgumentException("Game over");
-            isWallHere();
-            isBonusHere();
+               if (model.arrayOfBodys.get(0).y > gridHeight) model.arrayOfBodys.get(0).y = 1;
+               // !!!!!!!!!!!!!! сделать проверку на стены!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           } else if (newWay == 1) { // low
+               lastWay = 1;
+               newWayForAllBodys();
+               model.arrayOfBodys.get(0).y--;
+               if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y-1)))
+                   throw new IllegalArgumentException("Game over");
+               isWallHere();
+               isBonusHere();
 
-            if (model.arrayOfBodys.get(0).y < 1) model.arrayOfBodys.get(0).y = gridHeight;
-        } else if (newWay == 2) { // left
-            lastWay = 2;
-            newWayForAllBodys();
-            model.arrayOfBodys.get(0).x--;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x-1, model.getHeadXAndY().y)))
-                throw new IllegalArgumentException("Game over");
-            isWallHere();
-            isBonusHere();
-            if (model.arrayOfBodys.get(0).x < 1) model.arrayOfBodys.get(0).x = gridWidth;
-        } else if (newWay == 3) { // right
-            lastWay = 3;
-            newWayForAllBodys();
-            model.arrayOfBodys.get(0).x++;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x+1, model.getHeadXAndY().y)))
-                throw new IllegalArgumentException("Game over");
-            isWallHere();
-            isBonusHere();
+               if (model.arrayOfBodys.get(0).y < 1) model.arrayOfBodys.get(0).y = gridHeight;
+           } else if (newWay == 2) { // left
+               lastWay = 2;
+               newWayForAllBodys();
+               model.arrayOfBodys.get(0).x--;
+               if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x-1, model.getHeadXAndY().y)))
+                   throw new IllegalArgumentException("Game over");
+               isWallHere();
+               isBonusHere();
+               if (model.arrayOfBodys.get(0).x < 1) model.arrayOfBodys.get(0).x = gridWidth;
+           } else if (newWay == 3) { // right
+               lastWay = 3;
+               newWayForAllBodys();
+               model.arrayOfBodys.get(0).x++;
+               if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x+1, model.getHeadXAndY().y)))
+                   throw new IllegalArgumentException("Game over");
+               isWallHere();
+               isBonusHere();
 
-            if (model.arrayOfBodys.get(0).x > gridWidth) model.arrayOfBodys.get(0).x = 1;
-        } else throw new IllegalArgumentException("Illegal way");
-    }
-*/
+               if (model.arrayOfBodys.get(0).x > gridWidth) model.arrayOfBodys.get(0).x = 1;
+           } else throw new IllegalArgumentException("Illegal way");
+       }
+   */
     public void way(int newWay) {
 
         if (newWay == 0) { // up
             lastWay = 0;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x,model.getHeadXAndY().y+1)))
+            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y + 1)))
                 throw new IllegalArgumentException("Game over");
 
             newWayForAllBodys();
             model.arrayOfBodys.get(0).y++;
-           // if (model.arrayOfBodys.size() > 1) {
-            //    System.out.println(model.arrayOfBodys.get(1).x + "   " + model.arrayOfBodys.get(1).y + "          " + model.arrayOfBodys.get(0).x + " " + model.arrayOfBodys.get(0).y);
-           // }
 
 
             if (model.arrayOfBodys.get(0).y > gridHeight) model.arrayOfBodys.get(0).y = 1;
-            // !!!!!!!!!!!!!! сделать проверку на стены!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         } else if (newWay == 1) { // low
             lastWay = 1;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x,model.getHeadXAndY().y-1)))
+            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y - 1)))
                 throw new IllegalArgumentException("Game over");
 
             newWayForAllBodys();
@@ -150,7 +151,7 @@ public class SnakesChanges {
             if (model.arrayOfBodys.get(0).y < 1) model.arrayOfBodys.get(0).y = gridHeight;
         } else if (newWay == 2) { // left
             lastWay = 2;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x-1,model.getHeadXAndY().y)))
+            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x - 1, model.getHeadXAndY().y)))
                 throw new IllegalArgumentException("Game over");
 
             newWayForAllBodys();
@@ -159,7 +160,7 @@ public class SnakesChanges {
             if (model.arrayOfBodys.get(0).x < 1) model.arrayOfBodys.get(0).x = gridWidth;
         } else if (newWay == 3) { // right
             lastWay = 3;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x+1,model.getHeadXAndY().y)))
+            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x + 1, model.getHeadXAndY().y)))
                 throw new IllegalArgumentException("Game over");
 
             newWayForAllBodys();

@@ -1,5 +1,7 @@
 import org.jetbrains.annotations.NotNull;
 
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+
 public class Functions {
 
     public static boolean isWallForSnake(@NotNull Wall wall, @NotNull SnakesBody snakesHead) {

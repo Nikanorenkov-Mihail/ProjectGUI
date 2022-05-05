@@ -1,5 +1,5 @@
 public class AllBonuses {
-    Bonus[] bonusesExist = new Bonus[50];
+    Bonus[] bonusesExist = new Bonus[200];// можем менять количество бонусов
 
     public void addRandoBonuses(int gridHight, int gridWight) {
         Bonus newBonus = new Bonus(1, 1);

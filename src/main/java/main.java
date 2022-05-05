@@ -1,4 +1,4 @@
-public class m1 {
+public class main {
     private static int gridHeight = 40;
     private static int gridWidth = 80;
     private static int cellSize = 20;
@@ -6,9 +6,7 @@ public class m1 {
     private static int windowWidth = gridWidth * cellSize;
 
     public static void main(String[] args) {
-        Wall[] walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 100);
-        HelloGL helloGL = new HelloGL(windowWidth, windowHeight, gridWidth, gridHeight, "Snake", walls);
+        HelloGL helloGL = new HelloGL(windowWidth, windowHeight, gridWidth, gridHeight, "Snake", 100);
         helloGL.run();
-
     }
 }

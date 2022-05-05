@@ -1,6 +1,4 @@
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Random;
 
 public class Bonus {
@@ -16,19 +14,18 @@ public class Bonus {
     public int bonusX() {
         return this.x;
     }
+
     public int bonusY() {
         return this.y;
     }
 
-
     public Bonus newRandomBonus(int gridHeight, int gridWidth) {
         Random random = new Random();
-        int x = random.nextInt(gridWidth);
-        int y = random.nextInt(gridHeight);
+        int x = random.nextInt(gridWidth - 2) + 2;
+        int y = random.nextInt(gridHeight - 2) + 2;
 
         return new Bonus(x, y);
     }
-
 
     @Override
     public boolean equals(Object o) {

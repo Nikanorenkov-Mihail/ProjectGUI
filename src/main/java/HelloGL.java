@@ -5,6 +5,7 @@ import org.lwjgl.system.*;
 
 import java.nio.*;
 import java.util.Random;
+import java.util.Scanner;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -13,9 +14,7 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class HelloGL {
-    int image = 0;
-    double lastTime = 0.0;
-    double lastTimeForTakts = 0.0;
+
     // The window handle
     private long window;
     private final int width, height;
@@ -23,11 +22,12 @@ public class HelloGL {
     private final String name;
     private Wall[] walls;
 
-    HelloGL(int width, int height, int gridWidth, int gridHeight, String name, Wall[] walls) {
+    HelloGL(int width, int height, int gridWidth, int gridHeight, String name, int sizeOfWalls) {
         this.height = height;
         this.width = width;
         this.name = name;
-        this.walls = walls;
+        this.walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, sizeOfWalls);
+        ;
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
     }
@@ -97,50 +97,25 @@ public class HelloGL {
 
         GlDraw glDraw = new GlDraw(gridHeight, gridWidth);
 
-
-        //SnakeModel modelOfSnake = new SnakeModel(10, 10, gridHeight, gridWidth);
-        int takt = 1; // такты для отрисовки бонуса
         AllBonuses allBonuses = new AllBonuses();
         allBonuses.addRandoBonuses(gridHeight, gridWidth);
         SnakesChanges change = new SnakesChanges(gridWidth, gridHeight, walls, allBonuses.bonusesExist);
 
-
+        Controller controller = new Controller(change, window);
 
         while (!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-
             glDraw.drawWalls(walls);
-            glDraw.drawBonus(allBonuses.bonusesExist[change.nowBonus], takt); // как только бонус съедят, достанем другой из массива
+            glDraw.drawBonus(allBonuses.bonusesExist[change.nowBonus]); // как только бонус съедят, достанем другой из массива
 
             glDraw.drawSnake(change);
 
             glfwSwapBuffers(window); // swap the color buffers
-            Random rnd = new Random();
-            // change.newWay(rnd.nextInt(3));
-            glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-                if (key == GLFW_KEY_W && action == GLFW_RELEASE) change.newWay(0); ////////////
-                else if (key == GLFW_KEY_S && action == GLFW_RELEASE) change.newWay(1); ////////////
-                else if (key == GLFW_KEY_A && action == GLFW_RELEASE) change.newWay(2); ////////////
-                else if (key == GLFW_KEY_D && action == GLFW_RELEASE) change.newWay(3); ////////////
 
+            controller.control();
 
-            });
-            //fps
-            double currentTime = glfwGetTime();
-            image++;
-            if (currentTime - lastTime > 1.0) {
-                System.out.println(image);
-                lastTime = currentTime;
-                image = 0;
-            }
-
-            if (currentTime - lastTimeForTakts > 0.01) {
-                takt++;
-                lastTimeForTakts = currentTime;
-                if (takt > 20) takt = 1;
-            }
-
+            glDraw.drawFPS();
 
             // Poll for window events. The key callback above will only be
             // invoked during this call.

@@ -22,18 +22,16 @@ public class Wall {
         boolean b = random.nextBoolean();
         int x = random.nextInt(gridWidth);
         int y = random.nextInt(gridHeight);
-        return new Wall(
-                x,
-                y,
-                x + (b ? 0 : random.nextInt(10)),
-                y + (!b ? 0 : random.nextInt(10))
-        );
+        int x2 = x + (b ? 0 : random.nextInt(8) + 2);
+        int y2 = y + (!b ? 0 : random.nextInt(8) + 2);
+        return new Wall(x, y, x2, y2);
     }
 
     public static Wall @NotNull [] newRandomWallsForGrid(int gridHeight, int gridWidth, int size) {
         Wall[] walls = new Wall[size];
-        if (size != 0){ for (int i = 0; i < size; i++) walls[i] = newRandomWallForGrid(gridHeight, gridWidth);}
-
+        if (size != 0) {
+            for (int i = 0; i < size; i++) walls[i] = newRandomWallForGrid(gridHeight, gridWidth);
+        }
         return walls;
     }
 

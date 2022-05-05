@@ -1,11 +1,17 @@
 
 import org.jetbrains.annotations.NotNull;
 
+import static org.lwjgl.glfw.GLFW.*;
 import static java.lang.Math.*;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GlDraw {
     private int gridHeight, gridWidth;
+    private double lastTimeForTakts = 0.0;
+    private int takt = 1;
+    private double lastTime = 0.0;
+    private int image = 0;
 
     GlDraw(int gridHeight, int gridWidth) {
         this.gridHeight = gridHeight;
@@ -38,7 +44,14 @@ public class GlDraw {
         glEnd();
     }
 
-    public void drawBonus(@NotNull Bonus bonus, int takt) {
+    public void drawBonus(@NotNull Bonus bonus) {
+        double currentTime = glfwGetTime();
+        if (currentTime - lastTimeForTakts > 0.01) {
+            takt++;
+            lastTimeForTakts = currentTime;
+            if (takt > 20) takt = 1;
+        }
+
         glColor3f(1.0f, 0.0f, 0.0f);
         int x = bonus.x;
         int y = bonus.y;
@@ -64,17 +77,28 @@ public class GlDraw {
     }
 
     public void drawSnake(@NotNull SnakesChanges snake) {
-        for (int i = 0; i < snake.model.arrayOfBodys.size() ; i++) {
+        for (int i = 0; i < snake.model.arrayOfBodys.size(); i++) {
             glBegin(GL_LINE_LOOP);
             glColor3f(1.0f, 0.0f, 0.0f);
             for (int k = 0; k <= 360; k++) {
                 double angle = PI * k / 180.0;
-                glVertex2f(convertDoubleX((snake.model.arrayOfBodys.get(i).x + 0.5 * cos(angle))), convertDoubleY(((snake.model.arrayOfBodys.get(i).y + 0.5 * sin(angle)))));
+                glVertex2f(convertDoubleX((snake.model.arrayOfBodys.get(i).x + 0.6 * cos(angle))), convertDoubleY(((snake.model.arrayOfBodys.get(i).y + 0.6 * sin(angle)))));
             }
             glEnd();
         }
 
 
+    }
+
+    public void drawFPS() {
+
+        double currentTime = glfwGetTime();
+        image++;
+        if (currentTime - lastTime > 0.5) {
+            System.out.println(image);
+            lastTime = currentTime;
+            image = 0;
+        }
     }
 /*
     public void drawGrid() {// функция, которая отрисовывает сетку
