@@ -1,4 +1,4 @@
-public class main {
+public class Main {
     private static int gridHeight = 40;
     private static int gridWidth = 80;
     private static int cellSize = 20;
