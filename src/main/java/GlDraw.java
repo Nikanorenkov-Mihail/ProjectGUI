@@ -1,7 +1,6 @@
 
 import org.jetbrains.annotations.NotNull;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static java.lang.Math.*;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.opengl.GL11.*;
@@ -46,7 +45,7 @@ public class GlDraw {
 
     public void drawBonus(@NotNull Bonus bonus) {
         double currentTime = glfwGetTime();
-        if (currentTime - lastTimeForTakts > 0.01) {
+        if (currentTime - lastTimeForTakts > 0.01) { // delay всегда один
             takt++;
             lastTimeForTakts = currentTime;
             if (takt > 20) takt = 1;

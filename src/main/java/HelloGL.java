@@ -4,8 +4,6 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
 import java.nio.*;
-import java.util.Random;
-import java.util.Scanner;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -15,21 +13,25 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class HelloGL {
 
+    // какие-то настройки игры
+
     // The window handle
     private long window;
     private final int width, height;
     private final int gridWidth, gridHeight;
     private final String name;
     private Wall[] walls;
+    private double delayForController = 0.3;
+    private boolean withReplays;
 
-    HelloGL(int width, int height, int gridWidth, int gridHeight, String name, int sizeOfWalls) {
+    HelloGL(int width, int height, int gridWidth, int gridHeight, String name, int sizeOfWalls, boolean withReplays) {
         this.height = height;
         this.width = width;
         this.name = name;
         this.walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, sizeOfWalls);
-        ;
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
+        this.withReplays = withReplays;
     }
 
     public void run() {
@@ -99,9 +101,9 @@ public class HelloGL {
 
         AllBonuses allBonuses = new AllBonuses();
         allBonuses.addRandoBonuses(gridHeight, gridWidth);
-        SnakesChanges change = new SnakesChanges(gridWidth, gridHeight, walls, allBonuses.bonusesExist);
+        SnakesChanges change = new SnakesChanges(gridWidth, gridHeight, walls, allBonuses.bonusesExist, withReplays);
 
-        Controller controller = new Controller(change, window);
+        Controller controller = new Controller(change, window, delayForController);
 
         while (!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
