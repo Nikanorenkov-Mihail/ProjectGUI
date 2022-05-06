@@ -6,12 +6,10 @@ public class SnakesChanges {
     Bonus[] masOfBonuses;
     int nowBonus = 0;
     int lastWay = 0;
-    int lastWayNotMe = 0;
+    int lastWayNotMe = 0; //last command
     boolean noCommands = true;
     boolean wayIntoMe = false;
     boolean withReplays;
-    int keyForReplays = 0;
-    Replays replay = new Replays();
 
     public SnakesChanges(int gridWidth, int gridHeight, Wall[] masOfWalls, Bonus[] masOfBonuses, boolean withReplays) {
         this.gridWidth = gridWidth;
@@ -143,7 +141,7 @@ public class SnakesChanges {
                     lastWay = 0;
                     lastWayNotMe = lastWay;
 
-                    keyForReplays = lastWay;
+
                 } else wayIntoMe = true;
 
                 if (model.arrayOfBodys.get(0).y > gridHeight) model.arrayOfBodys.get(0).y = 1;
@@ -155,7 +153,7 @@ public class SnakesChanges {
                     model.arrayOfBodys.get(0).y--;
                     lastWay = 1;
                     lastWayNotMe = lastWay;
-                    keyForReplays = lastWay;
+
                 } else wayIntoMe = true;
 
                 if (model.arrayOfBodys.get(0).y < 1) model.arrayOfBodys.get(0).y = gridHeight;
@@ -167,7 +165,7 @@ public class SnakesChanges {
                     model.arrayOfBodys.get(0).x--;
                     lastWay = 2;
                     lastWayNotMe = lastWay;
-                    keyForReplays = lastWay;
+
                 } else wayIntoMe = true;
 
                 if (model.arrayOfBodys.get(0).x < 1) model.arrayOfBodys.get(0).x = gridWidth;
@@ -179,7 +177,7 @@ public class SnakesChanges {
                     model.arrayOfBodys.get(0).x++;
                     lastWay = 3;
                     lastWayNotMe = lastWay;
-                    keyForReplays = lastWay;
+
                 } else wayIntoMe = true;
 
                 if (model.arrayOfBodys.get(0).x > gridWidth) model.arrayOfBodys.get(0).x = 1;
@@ -190,14 +188,14 @@ public class SnakesChanges {
 
         if (wayIntoMe) wayInMe();
 
-        if (withReplays) replay.writer(keyForReplays);
+
 
     }
 
     private void wayInMe() {
 
         newWayForAllBodys();
-        keyForReplays = lastWayNotMe;
+
         switch (lastWayNotMe) {
             case (0):
                 model.arrayOfBodys.get(0).y++;

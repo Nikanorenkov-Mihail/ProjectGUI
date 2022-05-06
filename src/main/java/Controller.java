@@ -8,6 +8,7 @@ public class Controller {
     int counterForDelay = 0;
 
 
+
     public Controller(SnakesChanges change, long window1, double delay) {
         this.change = change;
         this.window1 = window1;
@@ -70,4 +71,6 @@ public class Controller {
             counterForDelay++;
         }
     }
+
+
 }

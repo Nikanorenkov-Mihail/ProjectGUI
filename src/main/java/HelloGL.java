@@ -23,6 +23,7 @@ public class HelloGL {
     private Wall[] walls;
     private double delayForController = 0.3;
     private boolean withReplays;
+    private Replays replay = new Replays();
 
     HelloGL(int width, int height, int gridWidth, int gridHeight, String name, int sizeOfWalls, boolean withReplays) {
         this.height = height;
@@ -105,6 +106,7 @@ public class HelloGL {
 
         Controller controller = new Controller(change, window, delayForController);
 
+        replay.writeParameters((walls.length != 0), walls, allBonuses);
         while (!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
@@ -118,6 +120,7 @@ public class HelloGL {
             controller.control();
 
             glDraw.drawFPS();
+            if (withReplays) replay.writeWays(change.lastWayNotMe);
 
             // Poll for window events. The key callback above will only be
             // invoked during this call.
