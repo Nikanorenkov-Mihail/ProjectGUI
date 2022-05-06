@@ -1,6 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
@@ -10,9 +8,10 @@ public class Replays {
     int takt = 0;
     int simInLine = 0;
 
+
     public void writeParameters(boolean withWalls, Wall[] walls, AllBonuses bonuses) {
         if (withWalls) {
-            result.append("t").append("\n");
+            result.append("t ").append(walls.length).append("\n");
             for (int i = 0; i < walls.length; i++) {
                 result.append(walls[i].x1).append(" ").append(walls[i].y1).append(" ");
                 result.append(walls[i].x2).append(" ").append(walls[i].y2).append("\n");
@@ -39,9 +38,35 @@ public class Replays {
                 writer.append(result); //!!!!!!!!!!!!
                 // add bonuses
             } catch (IOException e) {
-                throw new IllegalArgumentException("File");
+                throw new IllegalArgumentException("FileWrite");
             }
         }
+    }
+
+    public void watchReplay() {
+        boolean walls = false;
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("Replays/replayTest.txt"));
+            String line = br.readLine();
+            if (line.split(" ")[0].equals("t")) {
+                walls = true;
+                int size = Integer.parseInt(line.split(" ")[1]);
+                Wall[] masOfWalls = new Wall[size];
+            }else if(line.split(" ")[0].equals("f")){}
+            else throw new IllegalArgumentException("ErrorFileContext");
+            while (!line.isEmpty()) {
+                if (walls) {
+                }
+
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
