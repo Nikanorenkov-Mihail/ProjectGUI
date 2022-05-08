@@ -2,7 +2,8 @@
 import org.jetbrains.annotations.NotNull;
 
 import static java.lang.Math.*;
-import static org.lwjgl.glfw.GLFW.glfwGetTime;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.opengl.GL11.*;
 
 public class GlDraw {
@@ -99,21 +100,21 @@ public class GlDraw {
             image = 0;
         }
     }
-/*
+
+
     public void drawGrid() {// функция, которая отрисовывает сетку
-        glColor3f(0.0f, 1.0f, 0.0f);
+        glColor3f(0.32f, 0.32f, 0.32f);
         glBegin(GL_LINES);
-        for (int i = 0; i < gridHeight; i++) {
+        for (int i = 0; i < gridHeight; i += 2.5) {
             glVertex2f(convertX(0), convertY(i));
             glVertex2f(convertX(gridWidth), convertY(i));
         }
-        for (int j = 0; j < gridWidth; j++) {
+        for (int j = 0; j < gridWidth; j += 2.5) {
             glVertex2f(convertX(j), convertY(0));
             glVertex2f(convertX(j), convertY(gridHeight));
         }
         glEnd();
     }
-*/
 
 
 }

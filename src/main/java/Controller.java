@@ -1,3 +1,5 @@
+import org.jetbrains.annotations.NotNull;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Controller {
@@ -6,16 +8,17 @@ public class Controller {
     boolean pauseControl = false;
     double delay;
     int counterForDelay = 0;
+    double lastTimeForKeys = 0.0;
+    int counterForStr = 0;
+    String allWays;
 
-
-
-    public Controller(SnakesChanges change, long window1, double delay) {
+    public Controller(SnakesChanges change, long window1, double delay, String allWays) {
         this.change = change;
         this.window1 = window1;
         this.delay = delay;
+        this.allWays = allWays;
     }
 
-    double lastTimeForKeys = 0.0;
 
     public void control() {
         double currentTime = glfwGetTime();
@@ -66,11 +69,33 @@ public class Controller {
     }
 
     private void changeDelay() {
-        if (change.nowBonus != counterForDelay && delay > 0.1) {
-            delay -= 0.03;
+        if (change.nowBonus != counterForDelay && delay > 0.14) {
+            delay -= 0.02;
             counterForDelay++;
         }
     }
 
+    public void controllerForReplays() {
+
+        double currentTime = glfwGetTime();
+        if (currentTime - lastTimeForKeys > delay) {
+            glfwSetKeyCallback(window1, (window, key, scancode, action, mods) -> {
+                if (key == GLFW_KEY_ESCAPE) {
+                    stop(window);
+                }
+            });
+            if (counterForStr == allWays.length()) {
+                change.newWay();
+                // дальше схватят стену и кинут исключение
+            }
+            lastTimeForKeys = currentTime;
+            change.lastWay = (int) allWays.charAt(counterForStr) - 48;
+            change.newWay();
+            changeDelay();
+            counterForStr++;
+
+        }
+
+    }
 
 }

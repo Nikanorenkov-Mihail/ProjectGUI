@@ -1,3 +1,5 @@
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+
 public class SnakesChanges {
     int gridWidth;
     int gridHeight;
@@ -59,6 +61,12 @@ public class SnakesChanges {
 
         for (int i = 0; i < masOfWalls.length; i++) {
             if (Functions.isWallForSnake(masOfWalls[i], model.getHeadXAndY())) {
+                double curTime = glfwGetTime();
+                double timeToStop = curTime + 2;
+                while (timeToStop - curTime > 0) {
+                    curTime = glfwGetTime();
+                }
+
                 throw new IllegalArgumentException("Game over  Your score: " + (nowBonus + 1) * 5);
             }
         }
@@ -189,7 +197,6 @@ public class SnakesChanges {
         if (wayIntoMe) wayInMe();
 
 
-
     }
 
     private void wayInMe() {
@@ -223,8 +230,14 @@ public class SnakesChanges {
     private void isNewWayNotSnake() {
 
         for (int i = 2; i < model.arrayOfBodys.size(); i++) {
-            if (model.arrayOfBodys.get(i).equalsXY(model.getHeadXAndY()))
+            if (model.arrayOfBodys.get(i).equalsXY(model.getHeadXAndY())) {
+                double curTime = glfwGetTime();
+                double timeToStop = curTime + 2;
+                while (timeToStop - curTime > 0) {
+                    curTime = glfwGetTime();
+                }
                 throw new IllegalArgumentException("Game over");
+            }
         }
 
     }
