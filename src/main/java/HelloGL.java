@@ -125,7 +125,7 @@ public class HelloGL {
             } // само окно начала игры
             if (user.button == 3) {
 
-                replay.watchReplayForStr("Replays/replayTest.txt"); // тут имя реплея
+                replay.watchReplayForStr(1); // тут номер реплея
                 SnakesChanges changeForReplay = new SnakesChanges(gridWidth, gridHeight, replay.masOfWalls, replay.bonus.bonusesExist, false);
                 Controller controllerForReplays = new Controller(changeForReplay, window, delayForController, replay.allWays); ///////////////
 

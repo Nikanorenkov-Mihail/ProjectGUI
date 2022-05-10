@@ -13,6 +13,8 @@ public class Replays {
     AllBonuses bonus = new AllBonuses();
     String allWays = "";
     String nameForReplayFile;
+    String fileDirectory = "Replays"; // тут можно поменять имя папки для просмотра реплеев
+    String name = "Replay";
 
     public Replays() {
         nameForReplayFile = searchNewNameForReplayFile();
@@ -52,11 +54,14 @@ public class Replays {
         }
     }
 
-    public void watchReplayForStr(String file) {
+    public void watchReplayForStr(int numberOfReplay) {
 
         try {
             int counter = 0;
-            BufferedReader br = new BufferedReader(new FileReader(file));
+            File dir = new File(fileDirectory);
+            File[] listFiles = dir.listFiles();
+
+            BufferedReader br = new BufferedReader(new FileReader(fileDirectory + "/" + name + numberOfReplay + ".txt"));
             String line = br.readLine();
             if (line.split(" ")[0].equals("t")) {
                 int size = Integer.parseInt(line.split(" ")[1]);
@@ -109,17 +114,15 @@ public class Replays {
     }
 
     private @NotNull String searchNewNameForReplayFile() {
-        String file = "Replays"; // тут можно поменять имя папки для просмотра реплеев
 
-        String name = "Replay";
-        File dir = new File(file);
+        File dir = new File(fileDirectory);
         if (!dir.isDirectory() || !dir.exists()) {
-            new File(file).mkdir();
-            dir = new File(file);
+            new File(fileDirectory).mkdir();
+            dir = new File(fileDirectory);
         }
 
         File[] listFiles = dir.listFiles();
-        String nameToFind = name + listFiles.length + ".txt";
+        String nameToFind = name + (listFiles.length + 1) + ".txt";
         if (listFiles.length != 0) {
             if (!isOnlyRightFilesInDirectory(listFiles, name))
                 throw new IllegalArgumentException("Wrong directory"); // проверка на правильность содержимого папки
@@ -127,11 +130,11 @@ public class Replays {
             // но, не убираем, кто знает, что запишет в папку пользователь
         }
 
-        return file + "/" + name + listFiles.length + ".txt";
+        return fileDirectory + "/" + name + (listFiles.length + 1) + ".txt";
     }
 
     private boolean isOnlyRightFilesInDirectory(File @NotNull [] listFiles, String name) {
-        int counter = 0;
+        int counter = 1;
         for (File f : listFiles) {
             if (f.getName().equals(name + counter + ".txt")) { // файлы строго по порядку
                 // написать бы еще сортировку...
