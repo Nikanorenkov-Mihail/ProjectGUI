@@ -1,6 +1,6 @@
-import org.jetbrains.annotations.NotNull;
-
 import static org.lwjgl.glfw.GLFW.*;
+
+import org.lwjgl.glfw.GLFWGamepadState;
 
 public class Controller {
     SnakesChanges change;
@@ -12,13 +12,13 @@ public class Controller {
     int counterForStr = 0;
     String allWays;
 
+
     public Controller(SnakesChanges change, long window1, double delay, String allWays) {
         this.change = change;
         this.window1 = window1;
         this.delay = delay;
         this.allWays = allWays;
     }
-
 
     public void control() {
         double currentTime = glfwGetTime();
@@ -36,9 +36,8 @@ public class Controller {
                 });
 
             } else {
+
                 glfwSetKeyCallback(window1, (window, key, scancode, action, mods) -> {
-
-
                     if (key == GLFW_KEY_ESCAPE)
                         stop(window);
                     else if (key == GLFW_KEY_W || key == GLFW_KEY_UP) {
@@ -53,10 +52,12 @@ public class Controller {
                         pause();
                     }
                 });
+
                 change.newWay();//едет по lastWay
                 changeDelay();
             }
         }
+
     }
 
     private void stop(long wind) {

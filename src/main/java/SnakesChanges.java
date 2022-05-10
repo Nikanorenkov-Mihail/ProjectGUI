@@ -93,52 +93,6 @@ public class SnakesChanges {
         isNewWayNotSnake();
     }
 
-    /*   public void wayWithWalls(int newWay) {
-
-           if (newWay == 0) { // up
-               lastWay = 0;
-               newWayForAllBodys();
-
-               model.arrayOfBodys.get(0).y++;
-               if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y+1)))
-                   throw new IllegalArgumentException("Game over");
-               isWallHere();
-               isBonusHere();
-
-               if (model.arrayOfBodys.get(0).y > gridHeight) model.arrayOfBodys.get(0).y = 1;
-               // !!!!!!!!!!!!!! сделать проверку на стены!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-           } else if (newWay == 1) { // low
-               lastWay = 1;
-               newWayForAllBodys();
-               model.arrayOfBodys.get(0).y--;
-               if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y-1)))
-                   throw new IllegalArgumentException("Game over");
-               isWallHere();
-               isBonusHere();
-
-               if (model.arrayOfBodys.get(0).y < 1) model.arrayOfBodys.get(0).y = gridHeight;
-           } else if (newWay == 2) { // left
-               lastWay = 2;
-               newWayForAllBodys();
-               model.arrayOfBodys.get(0).x--;
-               if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x-1, model.getHeadXAndY().y)))
-                   throw new IllegalArgumentException("Game over");
-               isWallHere();
-               isBonusHere();
-               if (model.arrayOfBodys.get(0).x < 1) model.arrayOfBodys.get(0).x = gridWidth;
-           } else if (newWay == 3) { // right
-               lastWay = 3;
-               newWayForAllBodys();
-               model.arrayOfBodys.get(0).x++;
-               if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x+1, model.getHeadXAndY().y)))
-                   throw new IllegalArgumentException("Game over");
-               isWallHere();
-               isBonusHere();
-
-               if (model.arrayOfBodys.get(0).x > gridWidth) model.arrayOfBodys.get(0).x = 1;
-           } else throw new IllegalArgumentException("Illegal way");
-       }
-   */
     public void way(int newWay) {
         switch (newWay) {
             case (0): // up
@@ -206,15 +160,19 @@ public class SnakesChanges {
         switch (lastWayNotMe) {
             case (0):
                 model.arrayOfBodys.get(0).y++;
+                if (model.arrayOfBodys.get(0).y > gridHeight) model.arrayOfBodys.get(0).y = 1;
                 break;
             case (1):
                 model.arrayOfBodys.get(0).y--;
+                if (model.arrayOfBodys.get(0).y < 1) model.arrayOfBodys.get(0).y = gridHeight;
                 break;
             case (2):
                 model.arrayOfBodys.get(0).x--;
+                if (model.arrayOfBodys.get(0).x < 1) model.arrayOfBodys.get(0).x = gridWidth;
                 break;
             case (3):
                 model.arrayOfBodys.get(0).x++;
+                if (model.arrayOfBodys.get(0).x > gridWidth) model.arrayOfBodys.get(0).x = 1;
                 break;
         }
         wayIntoMe = false;
@@ -242,43 +200,3 @@ public class SnakesChanges {
 
     }
 }
-/*
-        if (newWay == 0) { // up
-            lastWay = 0;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y + 1)))
-                throw new IllegalArgumentException("Game over");
-
-            newWayForAllBodys();
-            model.arrayOfBodys.get(0).y++;
-
-
-            if (model.arrayOfBodys.get(0).y > gridHeight) model.arrayOfBodys.get(0).y = 1;
-
-        } else if (newWay == 1) { // low
-            lastWay = 1;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x, model.getHeadXAndY().y - 1)))
-                throw new IllegalArgumentException("Game over");
-
-            newWayForAllBodys();
-            model.arrayOfBodys.get(0).y--;
-
-            if (model.arrayOfBodys.get(0).y < 1) model.arrayOfBodys.get(0).y = gridHeight;
-        } else if (newWay == 2) { // left
-            lastWay = 2;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x - 1, model.getHeadXAndY().y)))
-                throw new IllegalArgumentException("Game over");
-
-            newWayForAllBodys();
-            model.arrayOfBodys.get(0).x--;
-
-            if (model.arrayOfBodys.get(0).x < 1) model.arrayOfBodys.get(0).x = gridWidth;
-        } else if (newWay == 3) { // right
-            lastWay = 3;
-            if (model.arrayOfBodys.size() > 1 && model.arrayOfBodys.get(1).equalsXY(new SnakesBody(model.getHeadXAndY().x + 1, model.getHeadXAndY().y)))
-                throw new IllegalArgumentException("Game over");
-
-            newWayForAllBodys();
-            model.arrayOfBodys.get(0).x++;
-
-            if (model.arrayOfBodys.get(0).x > gridWidth) model.arrayOfBodys.get(0).x = 1;
-        } else throw new IllegalArgumentException("Illegal way");*/

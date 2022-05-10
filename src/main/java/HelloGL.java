@@ -25,14 +25,16 @@ public class HelloGL {
     private boolean withReplays;
     private Replays replay = new Replays();
     private boolean styleGrid = false;
+    private int cellSize;
+    private int sizeOfWalls;
 
-    HelloGL(int width, int height, int gridWidth, int gridHeight, String name, int sizeOfWalls, boolean withReplays) {
+    HelloGL(int width, int height, int gridWidth, int gridHeight, String name, int cellSize, boolean withReplays) {
         this.height = height;
         this.width = width;
         this.name = name;
-        this.walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, sizeOfWalls);
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
+        this.cellSize = cellSize;
         this.withReplays = withReplays;
     }
 
@@ -94,111 +96,89 @@ public class HelloGL {
     }
 
     private void loop() {
-
-        GL.createCapabilities();
-
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-        GlDraw glDraw = new GlDraw(gridHeight, gridWidth);
-
-        AllBonuses allBonuses = new AllBonuses();
-        allBonuses.addRandoBonuses(gridHeight, gridWidth);
-        SnakesChanges change = new SnakesChanges(gridWidth, gridHeight, walls, allBonuses.bonusesExist, withReplays);
-
-        Controller controller = new Controller(change, window, delayForController, "");
-
-        boolean param = false; // пока что правда это просмотр последней игры, а лож игра
-        if (!param) {
-            if (withReplays) replay.writeParameters((walls.length != 0), walls, allBonuses);
-            while (!glfwWindowShouldClose(window)) {
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-                if (styleGrid) glDraw.drawGrid();
-                glDraw.drawWalls(walls);
-                glDraw.drawBonus(allBonuses.bonusesExist[change.nowBonus]); // как только бонус съедят, достанем другой из массива
-
-                glDraw.drawSnake(change);
-
-                glfwSwapBuffers(window); // swap the color buffers
-
-                controller.control();
-
-                glDraw.drawFPS();
-                if (withReplays) replay.writeWays(change.lastWayNotMe, controller.delay); /////////////////////
-
-                // Poll for window events. The key callback above will only be
-                // invoked during this call.
-                glfwPollEvents();
-            }
-        }
-        if (param) {
-            // replay.writeParameters((walls.length != 0), walls, allBonuses);
-            replay.watchReplayForStr("Replays/replayTest.txt");
-            SnakesChanges changeForReplay = new SnakesChanges(gridWidth, gridHeight, replay.masOfWalls, replay.bonus.bonusesExist, false);
-            Controller controllerForReplays = new Controller(changeForReplay, window, delayForController, replay.allWays); ///////////////
-
-            while (!glfwWindowShouldClose(window)) {
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-                if (styleGrid) glDraw.drawGrid();
-                glDraw.drawWalls(changeForReplay.masOfWalls);
-                glDraw.drawBonus(changeForReplay.masOfBonuses[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
-
-                glDraw.drawSnake(changeForReplay);
-                controllerForReplays.controllerForReplays();
-                glfwSwapBuffers(window); // swap the color buffers
-
-
-                // Poll for window events. The key callback above will only be
-                // invoked during this call.
-                glfwPollEvents();
-            }
-
-       /* if (withReplays) {
-            SnakesChanges changeForReplay = new SnakesChanges(gridWidth, gridHeight, replay.masOfWalls, replay.bonus.bonusesExist, false);
-            Controller controllerForReplays = new Controller(changeForReplay, window, delayForController); ///////////////
-
-            while (!glfwWindowShouldClose(window)) {
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
-                glDraw.drawWalls(replay.masOfWalls);
-                glDraw.drawBonus(replay.bonus.bonusesExist[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
-
-                glDraw.drawSnake(changeForReplay);
-
-                glfwSwapBuffers(window); // swap the color buffers
-
-                controllerForReplays.control();
-
-
-                // Poll for window events. The key callback above will only be
-                // invoked during this call.
-                glfwPollEvents();
-            }
-        }*/
-        }
-/*
-    private void watchRepalys(String file, long window, SnakesChanges change) {
-        //"Replays/replayTest.txt"
-        GlDraw drawWalls = new GlDraw(gridHeight, gridWidth);
-
-        Replays replay = new Replays();
-        drawWalls(replay.masOfWalls);
         while (!glfwWindowShouldClose(window)) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+            GL.createCapabilities();
 
-            GlDrawdrawWalls(change.masOfWalls);
-            drawBonus(change.masOfBonuses[change.nowBonus]); // как только бонус съедят, достанем другой из массива
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-            drawSnake(change);
+            GlDraw glDraw = new GlDraw(gridHeight, gridWidth);
 
-            glfwSwapBuffers(window); // swap the color buffers
+            // спрашиваем, что хочет пользователь
+            // 1 - игра без стен
+            // 2 - игра со стенами
+            // 3 - просмотр реплея !!! задать номер реплея для просмотра
+            AskUser user = new AskUser(gridHeight, gridWidth);
+            ControllerMouse controlMouse = new ControllerMouse(user, window, cellSize, gridHeight, gridWidth);
+
+            while (user.button == 9) { // интерфейс пользователя перед игрой
+
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+                glColor3f(1.0f, 0.0f, 0.0f);
+                glDraw.askUser(window, user);
+                controlMouse.checkMouse();
+                glfwSwapBuffers(window); // swap the color buffers
 
 
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
+                // Poll for window events. The key callback above will only be
+                // invoked during this call.
+                glfwPollEvents();
+            } // само окно начала игры
+            if (user.button == 3) {
+
+                replay.watchReplayForStr("Replays/replayTest.txt"); // тут имя реплея
+                SnakesChanges changeForReplay = new SnakesChanges(gridWidth, gridHeight, replay.masOfWalls, replay.bonus.bonusesExist, false);
+                Controller controllerForReplays = new Controller(changeForReplay, window, delayForController, replay.allWays); ///////////////
+
+                while (!glfwWindowShouldClose(window)) {
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+                    if (styleGrid) glDraw.drawGrid();
+                    glDraw.drawWalls(changeForReplay.masOfWalls);
+                    glDraw.drawBonus(changeForReplay.masOfBonuses[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
+
+                    glDraw.drawSnake(changeForReplay);
+                    controllerForReplays.controllerForReplays();
+                    glfwSwapBuffers(window); // swap the color buffers
+
+
+                    // Poll for window events. The key callback above will only be
+                    // invoked during this call.
+                    glfwPollEvents();
+                }
+
+            } else
+            {
+
+                AllBonuses allBonuses = new AllBonuses();
+                allBonuses.addRandoBonuses(gridHeight, gridWidth);
+                if (user.button == 1)
+                    walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 0); // пользователь выбирает количество стен или 100
+                else if (user.button == 2) walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 100);
+                else throw new IllegalArgumentException("Error cant be here");
+                SnakesChanges change = new SnakesChanges(gridWidth, gridHeight, walls, allBonuses.bonusesExist, withReplays);
+
+                Controller controller = new Controller(change, window, delayForController, "");
+
+                if (withReplays) replay.writeParameters((walls.length != 0), walls, allBonuses);
+                while (!glfwWindowShouldClose(window)) {
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+                    if (styleGrid) glDraw.drawGrid();
+                    glDraw.drawWalls(walls);
+                    glDraw.drawBonus(allBonuses.bonusesExist[change.nowBonus]); // как только бонус съедят, достанем другой из массива
+
+                    glDraw.drawSnake(change);
+
+                    glfwSwapBuffers(window); // swap the color buffers
+
+                    controller.control();
+
+                    glDraw.drawFPS();
+                    if (withReplays) replay.writeWays(change.lastWayNotMe, controller.delay); /////////////////////
+
+                    // Poll for window events. The key callback above will only be
+                    // invoked during this call.
+                    glfwPollEvents();
+                }
+            }
         }
-
-    }*/
-
     }
 }

@@ -1,7 +1,9 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
+import java.util.Arrays;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
-import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 
 public class Replays {
     StringBuilder result = new StringBuilder();
@@ -10,6 +12,11 @@ public class Replays {
     Wall[] masOfWalls;
     AllBonuses bonus = new AllBonuses();
     String allWays = "";
+    String nameForReplayFile;
+
+    public Replays() {
+        nameForReplayFile = searchNewNameForReplayFile();
+    }
 
     public void writeParameters(boolean withWalls, Wall[] walls, AllBonuses bonuses) {
         if (withWalls) {
@@ -36,8 +43,8 @@ public class Replays {
                 simInLine = 0;
                 result.append("\n");
             }
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("Replays/replayTest.txt"))) {
-                writer.append(result); //!!!!!!!!!!!!
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(nameForReplayFile))) {
+                writer.append(result);
                 // add bonuses
             } catch (IOException e) {
                 throw new IllegalArgumentException("FileWrite");
@@ -71,11 +78,10 @@ public class Replays {
                     line = br.readLine();
                 }
             } else if (line.split(" ")[0].equals("f")) {
+                masOfWalls = new Wall[0];
                 line = br.readLine(); //должно быть b - bonus
             } else throw new IllegalArgumentException("ErrorFileContext");
             counter = 0;
-
-            // int sizeOfBonuses = Integer.parseInt(line.split(" ")[1]);
 
             line = br.readLine();
             int x;
@@ -85,7 +91,6 @@ public class Replays {
                 y = Integer.parseInt(line.split(" ")[1]);
                 bonus.bonusesExist[counter] = new Bonus(x, y);
                 counter++;
-                ///////////////////////////////////////////
                 line = br.readLine();
             }
             line = br.readLine();
@@ -103,5 +108,38 @@ public class Replays {
 
     }
 
+    private @NotNull String searchNewNameForReplayFile() {
+        String file = "Replays"; // тут можно поменять имя папки для просмотра реплеев
+
+        String name = "Replay";
+        File dir = new File(file);
+        if (!dir.isDirectory() || !dir.exists()) {
+            new File(file).mkdir();
+            dir = new File(file);
+        }
+
+        File[] listFiles = dir.listFiles();
+        String nameToFind = name + listFiles.length + ".txt";
+        if (listFiles.length != 0) {
+            if (!isOnlyRightFilesInDirectory(listFiles, name))
+                throw new IllegalArgumentException("Wrong directory"); // проверка на правильность содержимого папки
+            // проверку можно убрать, потому, что мы пишем только "правильные названия файлов"
+            // но, не убираем, кто знает, что запишет в папку пользователь
+        }
+
+        return file + "/" + name + listFiles.length + ".txt";
+    }
+
+    private boolean isOnlyRightFilesInDirectory(File @NotNull [] listFiles, String name) {
+        int counter = 0;
+        for (File f : listFiles) {
+            if (f.getName().equals(name + counter + ".txt")) { // файлы строго по порядку
+                // написать бы еще сортировку...
+                counter++;
+            } else return false;
+
+        }
+        return true;
+    }
 
 }

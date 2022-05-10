@@ -26,11 +26,11 @@ public class GlDraw {
         return -1.0f + 1.0f / (float) gridHeight * y * 2;
     }
 
-    private float convertDoubleX(double x) {
+    private float convertDoubleXToFloat(double x) {
         return (float) (-1.0f + 1.0f / (double) gridWidth * x * 2);
     }
 
-    private float convertDoubleY(double y) {
+    private float convertDoubleYToFloat(double y) {
         return (float) (-1.0f + 1.0f / (double) gridHeight * y * 2);
     }
 
@@ -71,7 +71,7 @@ public class GlDraw {
         glBegin(GL_LINE_LOOP);
         for (int i = 0; i <= 360; i++) {
             double angle = PI * i / 180.0;
-            glVertex2f(convertDoubleX((x + radius * cos(angle))), convertDoubleY(((y + radius * sin(angle)))));
+            glVertex2f(convertDoubleXToFloat((x + radius * cos(angle))), convertDoubleYToFloat(((y + radius * sin(angle)))));
         }
         glEnd();
     }
@@ -82,7 +82,7 @@ public class GlDraw {
             glColor3f(1.0f, 0.0f, 0.0f);
             for (int k = 0; k <= 360; k++) {
                 double angle = PI * k / 180.0;
-                glVertex2f(convertDoubleX((snake.model.arrayOfBodys.get(i).x + 0.6 * cos(angle))), convertDoubleY(((snake.model.arrayOfBodys.get(i).y + 0.6 * sin(angle)))));
+                glVertex2f(convertDoubleXToFloat((snake.model.arrayOfBodys.get(i).x + 0.6 * cos(angle))), convertDoubleYToFloat(((snake.model.arrayOfBodys.get(i).y + 0.6 * sin(angle)))));
             }
             glEnd();
         }
@@ -101,7 +101,6 @@ public class GlDraw {
         }
     }
 
-
     public void drawGrid() {// функция, которая отрисовывает сетку
         glColor3f(0.32f, 0.32f, 0.32f);
         glBegin(GL_LINES);
@@ -114,6 +113,20 @@ public class GlDraw {
             glVertex2f(convertX(j), convertY(gridHeight));
         }
         glEnd();
+    }
+
+    public void askUser(long window, AskUser user) {
+
+
+            for (int i = 0; i < 3; i++) {
+                glBegin(GL_LINE_LOOP); // отрисовка кнопок
+                glVertex2f(convertX(user.allButtons[i].x1), convertY(user.allButtons[i].y1));
+                glVertex2f(convertX(user.allButtons[i].x2), convertY(user.allButtons[i].y2));
+                glVertex2f(convertX(user.allButtons[i].x3), convertY(user.allButtons[i].y3));
+                glVertex2f(convertX(user.allButtons[i].x4), convertY(user.allButtons[i].y4));
+                glEnd();
+            }
+
     }
 
 
