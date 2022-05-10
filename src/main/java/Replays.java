@@ -124,8 +124,9 @@ public class Replays {
         File[] listFiles = dir.listFiles();
         String nameToFind = name + (listFiles.length + 1) + ".txt";
         if (listFiles.length != 0) {
-            if (!isOnlyRightFilesInDirectory(listFiles, name))
-                throw new IllegalArgumentException("Wrong directory"); // проверка на правильность содержимого папки
+            if (!isOnlyRightFilesInDirectory(listFiles, name)) {
+                throw new IllegalArgumentException("Wrong directory");
+            }// проверка на правильность содержимого папки
             // проверку можно убрать, потому, что мы пишем только "правильные названия файлов"
             // но, не убираем, кто знает, что запишет в папку пользователь
         }
@@ -134,14 +135,34 @@ public class Replays {
     }
 
     private boolean isOnlyRightFilesInDirectory(File @NotNull [] listFiles, String name) {
+        boolean test = false;
+        for (int i = 0; i < listFiles.length; i++) {
+            for (File f : listFiles) { // работает до 10 реплеев
+                if (f.getName().equals(name + (i + 1) + ".txt")) { // файлы строго по порядку
+                    System.out.println(f.getName());
+                    System.out.println(name + i + 1 + ".txt");
+                    System.out.println((f.getName().equals(name + i + 1 + ".txt")));
+                    // написать бы еще сортировку...
+                    test = true;
+                    break;
+                }
+            }
+            if (test) test = false;
+            else return false;
+        }
+
+/*
         int counter = 1;
-        for (File f : listFiles) {
+        for (File f : listFiles) { // работает до 10 реплеев
             if (f.getName().equals(name + counter + ".txt")) { // файлы строго по порядку
+                System.out.println(f.getName());
+                System.out.println(name + counter + ".txt");
+                System.out.println((f.getName().equals(name + counter + ".txt")));
                 // написать бы еще сортировку...
                 counter++;
             } else return false;
 
-        }
+        }*/
         return true;
     }
 

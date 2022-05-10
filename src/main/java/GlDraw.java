@@ -115,18 +115,30 @@ public class GlDraw {
         glEnd();
     }
 
-    public void askUser(long window, AskUser user) {
+    public void askUser(long window, @NotNull AskUser user) {
 
+        for (int i = 0; i < user.allButtonsForType.length; i++) {
+            glBegin(GL_LINE_LOOP); // отрисовка кнопок
+            glColor3f(0.0f, 1.0f, 0.0f);
+            glVertex2f(convertX(user.allButtonsForType[i].x1), convertY(user.allButtonsForType[i].y1));
+            glVertex2f(convertX(user.allButtonsForType[i].x2), convertY(user.allButtonsForType[i].y2));
+            glVertex2f(convertX(user.allButtonsForType[i].x3), convertY(user.allButtonsForType[i].y3));
+            glVertex2f(convertX(user.allButtonsForType[i].x4), convertY(user.allButtonsForType[i].y4));
+            glEnd();
+        }
 
-            for (int i = 0; i < 3; i++) {
-                glBegin(GL_LINE_LOOP); // отрисовка кнопок
-                glVertex2f(convertX(user.allButtons[i].x1), convertY(user.allButtons[i].y1));
-                glVertex2f(convertX(user.allButtons[i].x2), convertY(user.allButtons[i].y2));
-                glVertex2f(convertX(user.allButtons[i].x3), convertY(user.allButtons[i].y3));
-                glVertex2f(convertX(user.allButtons[i].x4), convertY(user.allButtons[i].y4));
-                glEnd();
-            }
+    }
 
+    public void askUserLevel(@NotNull AskUser user) {
+        for (int i = 0; i < user.allButtonsForLevel.length; i++) {
+            glBegin(GL_LINE_LOOP); // отрисовка кнопок
+            glColor3f(1.0f, 0.0f, 0.0f);
+            glVertex2f(convertX(user.allButtonsForLevel[i].x1), convertY(user.allButtonsForLevel[i].y1));
+            glVertex2f(convertX(user.allButtonsForLevel[i].x2), convertY(user.allButtonsForLevel[i].y2));
+            glVertex2f(convertX(user.allButtonsForLevel[i].x3), convertY(user.allButtonsForLevel[i].y3));
+            glVertex2f(convertX(user.allButtonsForLevel[i].x4), convertY(user.allButtonsForLevel[i].y4));
+            glEnd();
+        }
     }
 
 

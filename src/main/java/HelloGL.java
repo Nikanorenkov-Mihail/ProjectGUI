@@ -4,6 +4,7 @@ import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
 import java.nio.*;
+import java.util.Random;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -107,6 +108,7 @@ public class HelloGL {
             // 1 - игра без стен
             // 2 - игра со стенами
             // 3 - просмотр реплея !!! задать номер реплея для просмотра
+            // 4 - рандомный уровень игры
             AskUser user = new AskUser(gridHeight, gridWidth);
             ControllerMouse controlMouse = new ControllerMouse(user, window, cellSize, gridHeight, gridWidth);
 
@@ -115,7 +117,7 @@ public class HelloGL {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                 glColor3f(1.0f, 0.0f, 0.0f);
                 glDraw.askUser(window, user);
-                controlMouse.checkMouse();
+                controlMouse.checkMouse(true);
                 glfwSwapBuffers(window); // swap the color buffers
 
 
@@ -123,6 +125,7 @@ public class HelloGL {
                 // invoked during this call.
                 glfwPollEvents();
             } // само окно начала игры
+
             if (user.button == 3) {
 
                 replay.watchReplayForStr(1); // тут номер реплея
@@ -145,15 +148,64 @@ public class HelloGL {
                     glfwPollEvents();
                 }
 
-            } else
-            {
+            } else {
 
                 AllBonuses allBonuses = new AllBonuses();
                 allBonuses.addRandoBonuses(gridHeight, gridWidth);
+/*
+                if (user.button == 2) user.addAllQuestionsForLevelOfGameWithWalls();
+                // можем добавлять кнопочки
+                // тут не выносим кнопки в модель запроса, потому что выполняют очень простые функции
                 if (user.button == 1)
                     walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 0); // пользователь выбирает количество стен или 100
                 else if (user.button == 2) walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 100);
-                else throw new IllegalArgumentException("Error cant be here");
+                else if (user.button == 4) {
+                } else throw new IllegalArgumentException("Error cant be here" + user.button);
+              */
+
+                switch (user.button) {
+                    case (1):
+                        walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 0); // пользователь выбирает количество стен или 100
+
+                        break;
+                    case (2):
+                        user.addAllQuestionsForLevelOfGameWithWalls();
+                        while (user.level == 9) { // интерфейс пользователя перед игрой
+
+                            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+                            glColor3f(1.0f, 0.0f, 0.0f);
+
+                            glDraw.askUserLevel(user);
+                            controlMouse.checkMouse(false);
+
+
+                            glfwSwapBuffers(window); // swap the color buffers
+
+
+                            // Poll for window events. The key callback above will only be
+                            // invoked during this call.
+                            glfwPollEvents();
+                        } // само окно начала игры
+
+
+                        walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, user.level * 25);
+                        break;
+                    case (4):
+                        //!!!!!!!!!! сделать картинку с котиком
+                        Random rand = new Random();
+                        if (rand.nextBoolean()) {
+                            walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 0); // пользователь выбирает количество стен или 100
+                        } else {
+                            user.addAllQuestionsForLevelOfGameWithWalls();
+                            Random random = new Random();
+                            user.level= random.nextInt(4);
+
+                            walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, user.level * 25);
+                        }
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Error cant be here" + user.button);
+                }
                 SnakesChanges change = new SnakesChanges(gridWidth, gridHeight, walls, allBonuses.bonusesExist, withReplays);
 
                 Controller controller = new Controller(change, window, delayForController, "");

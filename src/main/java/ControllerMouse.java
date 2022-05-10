@@ -2,11 +2,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class ControllerMouse {
     long window1;
-    boolean pauseControl = false;
-    double delay;
-    int counterForDelay = 0;
-    double lastTimeForKeys = 0.0;
-    int counterForStr = 0;
+
     AskUser user;
     int cellSize;
     int gridHeight;
@@ -21,41 +17,30 @@ public class ControllerMouse {
         this.gridWidth = gridWidth;
     }
 
-    public void checkMouse() { // сделать
-
+    public void checkMouse(boolean typeOrLevel) {
         glfwSetCursorPosCallback(window1, (window1, posX, posY) -> {
 
             glfwSetKeyCallback(window1, (window, key, scancode, action, mods) -> {
                 if (key == GLFW_KEY_ESCAPE) stop(window);
-
             });
 
-            switch (user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize))) { // переворачиваем Y
-                case (0):
-                    glfwSetMouseButtonCallback(window1, (window, button, action, mods) -> {
-                        if (button == GLFW_MOUSE_BUTTON_LEFT) {
-                            user.button = 1;
-                        }
-                    });
-                    break;
+            glfwSetMouseButtonCallback(window1, (window, button, action, mods) -> {
+                if (button == GLFW_MOUSE_BUTTON_LEFT) {
+                    if (typeOrLevel) {
+                        user.button = user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize)) + 1;
+                    } else {
+                        user.level = user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize)) + 1;
+                    }
+                }
 
-                case (1):
-                    glfwSetMouseButtonCallback(window1, (window, button, action, mods) -> {
-                        if (button == GLFW_MOUSE_BUTTON_LEFT) {
-                            user.button = 2;
-                        }
-                    });
-                    break;
-
-                case (2):
-                    glfwSetMouseButtonCallback(window1, (window, button, action, mods) -> {
-                        if (button == GLFW_MOUSE_BUTTON_LEFT) {
-                            user.button = 3;
-                        }
-                    });
-                    break;
-            }
+            });
         });
+
+
+    }
+
+    public void controlForLevels() {
+
     }
 
     private void stop(long wind) {
