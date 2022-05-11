@@ -85,7 +85,7 @@ public class Replays {
             } else if (line.split(" ")[0].equals("f")) {
                 masOfWalls = new Wall[0];
                 line = br.readLine(); //должно быть b - bonus
-            } else throw new IllegalArgumentException("ErrorFileContext");
+            } else throw new IllegalArgumentException("WrongFileContext");
             counter = 0;
 
             line = br.readLine();
@@ -122,7 +122,7 @@ public class Replays {
         }
 
         File[] listFiles = dir.listFiles();
-        String nameToFind = name + (listFiles.length + 1) + ".txt";
+
         if (listFiles.length != 0) {
             if (!isOnlyRightFilesInDirectory(listFiles, name)) {
                 throw new IllegalArgumentException("Wrong directory");

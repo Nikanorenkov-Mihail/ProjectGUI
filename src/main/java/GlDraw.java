@@ -115,28 +115,28 @@ public class GlDraw {
         glEnd();
     }
 
-    public void askUser(long window, @NotNull AskUser user) {
+    public void askUser(Button @NotNull [] user) {
 
-        for (int i = 0; i < user.allButtonsForType.length; i++) {
+        for (int i = 0; i < user.length; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
             glColor3f(0.0f, 1.0f, 0.0f);
-            glVertex2f(convertX(user.allButtonsForType[i].x1), convertY(user.allButtonsForType[i].y1));
-            glVertex2f(convertX(user.allButtonsForType[i].x2), convertY(user.allButtonsForType[i].y2));
-            glVertex2f(convertX(user.allButtonsForType[i].x3), convertY(user.allButtonsForType[i].y3));
-            glVertex2f(convertX(user.allButtonsForType[i].x4), convertY(user.allButtonsForType[i].y4));
+            glVertex2f(convertX(user[i].x1), convertY(user[i].y1));
+            glVertex2f(convertX(user[i].x2), convertY(user[i].y2));
+            glVertex2f(convertX(user[i].x3), convertY(user[i].y3));
+            glVertex2f(convertX(user[i].x4), convertY(user[i].y4));
             glEnd();
         }
 
     }
 
-    public void askUserLevel(@NotNull AskUser user) {
-        for (int i = 0; i < user.allButtonsForLevel.length; i++) {
+    public void askUserLevel(Button @NotNull [] user) {
+        for (int i = 0; i < user.length; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
             glColor3f(1.0f, 0.0f, 0.0f);
-            glVertex2f(convertX(user.allButtonsForLevel[i].x1), convertY(user.allButtonsForLevel[i].y1));
-            glVertex2f(convertX(user.allButtonsForLevel[i].x2), convertY(user.allButtonsForLevel[i].y2));
-            glVertex2f(convertX(user.allButtonsForLevel[i].x3), convertY(user.allButtonsForLevel[i].y3));
-            glVertex2f(convertX(user.allButtonsForLevel[i].x4), convertY(user.allButtonsForLevel[i].y4));
+            glVertex2f(convertX(user[i].x1), convertY(user[i].y1));
+            glVertex2f(convertX(user[i].x2), convertY(user[i].y2));
+            glVertex2f(convertX(user[i].x3), convertY(user[i].y3));
+            glVertex2f(convertX(user[i].x4), convertY(user[i].y4));
             glEnd();
         }
     }

@@ -1,9 +1,11 @@
 public class AskUser {
     Button[] allButtonsForType = new Button[4]; // меняем количество кнопок
     Button[] allButtonsForLevel = new Button[5];
+    Button[] allButtonsOfEndGame = new Button[2];
     private int gridHeight, gridWidth;
     int button = 9;
     int level = 9;
+    int end = 9;
 
     public AskUser(int gridHeight, int gridWidth) {
         this.gridHeight = gridHeight;
@@ -104,7 +106,60 @@ public class AskUser {
         );*/
     }
 
-    public int clickOnButton(double clickX, double clickY) {
+    public void addAllQuestionsForEndGame() {
+        for (int i = 0; i < allButtonsOfEndGame.length; i++) {
+            allButtonsOfEndGame[i] = new Button(    (i == allButtonsForLevel.length - 1) ? gridWidth - 1 : (i == 0) ? 1 : (gridWidth / allButtonsOfEndGame.length * i) - 1, gridHeight / 3 * 2,
+                    (gridWidth / allButtonsOfEndGame.length * (i + 1)) - 1, gridHeight / 3 * 2,
+                    (gridWidth / allButtonsOfEndGame.length * (i + 1)) - 1, gridHeight / 3,
+                    (i == allButtonsForLevel.length - 1) ? gridWidth - 1 : (i == 0) ? 1 : (gridWidth / allButtonsOfEndGame.length * i) - 1, gridHeight / 3);
+        }
+        /*
+        allButtonsOfEndGame[0] = new Button(1, gridHeight / 3 * 2,
+                (gridWidth / allButtonsOfEndGame.length) - 1, gridHeight / 3 * 2,
+                (gridWidth / allButtonsOfEndGame.length) - 1, gridHeight / 3,
+                1, gridHeight / 3);
+
+        allButtonsOfEndGame[1] = new Button((gridWidth / allButtonsOfEndGame.length) - 1, gridHeight / 3 * 2,
+                (gridWidth / allButtonsOfEndGame.length * 2) - 1, gridHeight / 3 * 2,
+                (gridWidth / allButtonsOfEndGame.length * 2) - 1, gridHeight / 3,
+                (gridWidth / allButtonsOfEndGame.length) - 1, gridHeight / 3);
+
+        allButtonsOfEndGame[2] = new Button((gridWidth / allButtonsOfEndGame.length * 2) - 1, gridHeight / 3 * 2,
+                (gridWidth / allButtonsOfEndGame.length * 3) - 1, gridHeight / 3 * 2,
+                (gridWidth / allButtonsOfEndGame.length * 3) - 1, gridHeight / 3,
+                (gridWidth / allButtonsOfEndGame.length * 2) - 1, gridHeight / 3);*/
+
+    }
+
+    public int clickOnButton1(double clickX, double clickY) {
+        for (int i = 0; i < allButtonsForLevel.length; i++) {
+            System.out.println(allButtonsForLevel[i].x1 + " " + allButtonsForLevel[i].y1);
+            System.out.println(clickX + " " + clickY);
+            if (clickX >= allButtonsForLevel[i].x1 && clickX <= allButtonsForLevel[i].x2) {
+                if (clickY >= allButtonsForLevel[i].y4 && clickY <= allButtonsForLevel[i].y2) {
+                    return i;
+                }
+
+            }
+
+        }
+        return 9;
+    }
+    public int clickOnButton2(double clickX, double clickY) {
+        for (int i = 0; i < allButtonsOfEndGame.length; i++) {
+            System.out.println(allButtonsOfEndGame[i].x1 + " " + allButtonsOfEndGame[i].y1);
+            System.out.println(clickX + " " + clickY);
+            if (clickX >= allButtonsOfEndGame[i].x1 && clickX <= allButtonsOfEndGame[i].x2) {
+                if (clickY >= allButtonsOfEndGame[i].y4 && clickY <= allButtonsOfEndGame[i].y2) {
+                    return i;
+                }
+
+            }
+
+        }
+        return 9;
+    }
+    public int clickOnButton3(double clickX, double clickY) {
         for (int i = 0; i < allButtonsForType.length; i++) {
             System.out.println(allButtonsForType[i].x1 + " " + allButtonsForType[i].y1);
             System.out.println(clickX + " " + clickY);

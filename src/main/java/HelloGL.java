@@ -27,7 +27,6 @@ public class HelloGL {
     private Replays replay = new Replays();
     private boolean styleGrid = false;
     private int cellSize;
-    private int sizeOfWalls;
 
     HelloGL(int width, int height, int gridWidth, int gridHeight, String name, int cellSize, boolean withReplays) {
         this.height = height;
@@ -116,8 +115,8 @@ public class HelloGL {
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                 glColor3f(1.0f, 0.0f, 0.0f);
-                glDraw.askUser(window, user);
-                controlMouse.checkMouse(true);
+                glDraw.askUser(user.allButtonsForType);
+                controlMouse.checkMouse(0);
                 glfwSwapBuffers(window); // swap the color buffers
 
 
@@ -131,37 +130,34 @@ public class HelloGL {
                 replay.watchReplayForStr(1); // тут номер реплея
                 SnakesChanges changeForReplay = new SnakesChanges(gridWidth, gridHeight, replay.masOfWalls, replay.bonus.bonusesExist, false);
                 Controller controllerForReplays = new Controller(changeForReplay, window, delayForController, replay.allWays); ///////////////
+                try {
+                    while (!glfwWindowShouldClose(window)) {
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+                        if (styleGrid) glDraw.drawGrid();
+                        glDraw.drawWalls(changeForReplay.masOfWalls);
+                        glDraw.drawBonus(changeForReplay.masOfBonuses[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
 
-                while (!glfwWindowShouldClose(window)) {
-                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-                    if (styleGrid) glDraw.drawGrid();
-                    glDraw.drawWalls(changeForReplay.masOfWalls);
-                    glDraw.drawBonus(changeForReplay.masOfBonuses[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
-
-                    glDraw.drawSnake(changeForReplay);
-                    controllerForReplays.controllerForReplays();
-                    glfwSwapBuffers(window); // swap the color buffers
+                        glDraw.drawSnake(changeForReplay);
+                        controllerForReplays.controllerForReplays();
+                        glfwSwapBuffers(window); // swap the color buffers
 
 
-                    // Poll for window events. The key callback above will only be
-                    // invoked during this call.
-                    glfwPollEvents();
+                        // Poll for window events. The key callback above will only be
+                        // invoked during this call.
+                        glfwPollEvents();
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Game over Your score: " + changeForReplay.nowBonus * 5);
                 }
+
+                // !!!!!!!!!! сделать красивый экран окончания
 
             } else {
 
                 AllBonuses allBonuses = new AllBonuses();
                 allBonuses.addRandoBonuses(gridHeight, gridWidth);
-/*
+
                 if (user.button == 2) user.addAllQuestionsForLevelOfGameWithWalls();
-                // можем добавлять кнопочки
-                // тут не выносим кнопки в модель запроса, потому что выполняют очень простые функции
-                if (user.button == 1)
-                    walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 0); // пользователь выбирает количество стен или 100
-                else if (user.button == 2) walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 100);
-                else if (user.button == 4) {
-                } else throw new IllegalArgumentException("Error cant be here" + user.button);
-              */
 
                 switch (user.button) {
                     case (1):
@@ -175,8 +171,8 @@ public class HelloGL {
                             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                             glColor3f(1.0f, 0.0f, 0.0f);
 
-                            glDraw.askUserLevel(user);
-                            controlMouse.checkMouse(false);
+                            glDraw.askUserLevel(user.allButtonsForLevel);
+                            controlMouse.checkMouse(1);
 
 
                             glfwSwapBuffers(window); // swap the color buffers
@@ -198,7 +194,7 @@ public class HelloGL {
                         } else {
                             user.addAllQuestionsForLevelOfGameWithWalls();
                             Random random = new Random();
-                            user.level= random.nextInt(4);
+                            user.level = random.nextInt(4);
 
                             walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, user.level * 25);
                         }
@@ -211,25 +207,51 @@ public class HelloGL {
                 Controller controller = new Controller(change, window, delayForController, "");
 
                 if (withReplays) replay.writeParameters((walls.length != 0), walls, allBonuses);
-                while (!glfwWindowShouldClose(window)) {
-                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-                    if (styleGrid) glDraw.drawGrid();
-                    glDraw.drawWalls(walls);
-                    glDraw.drawBonus(allBonuses.bonusesExist[change.nowBonus]); // как только бонус съедят, достанем другой из массива
+                try {
+                    while (!glfwWindowShouldClose(window)) {
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+                        if (styleGrid) glDraw.drawGrid();
+                        glDraw.drawWalls(walls);
+                        glDraw.drawBonus(allBonuses.bonusesExist[change.nowBonus]); // как только бонус съедят, достанем другой из массива
 
-                    glDraw.drawSnake(change);
+                        glDraw.drawSnake(change);
 
-                    glfwSwapBuffers(window); // swap the color buffers
+                        glfwSwapBuffers(window); // swap the color buffers
 
-                    controller.control();
+                        controller.control();
 
-                    glDraw.drawFPS();
-                    if (withReplays) replay.writeWays(change.lastWayNotMe, controller.delay); /////////////////////
+                        glDraw.drawFPS();
+                        if (withReplays) replay.writeWays(change.lastWayNotMe, controller.delay); /////////////////////
 
-                    // Poll for window events. The key callback above will only be
-                    // invoked during this call.
-                    glfwPollEvents();
+                        // Poll for window events. The key callback above will only be
+                        // invoked during this call.
+                        glfwPollEvents();
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Game over Your score: " + change.nowBonus * 5);
+
+                    // !!!!!!!!!! сделать красивый экран окончания
+
+                    user.addAllQuestionsForEndGame();
+
+                    while (user.end == 9) { // интерфейс пользователя перед игрой
+
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+                        glColor3f(1.0f, 1.0f, 0.0f);
+                        glDraw.askUserLevel(user.allButtonsOfEndGame);
+                        controlMouse.checkMouse(2);
+                        glfwSwapBuffers(window); // swap the color buffers
+
+
+                        // Poll for window events. The key callback above will only be
+                        // invoked during this call.
+                        glfwPollEvents();
+                    } // само окно начала игры
+
+                    if (user.end == user.allButtonsOfEndGame.length) glfwSetWindowShouldClose(window, true);
+
                 }
+
             }
         }
     }
