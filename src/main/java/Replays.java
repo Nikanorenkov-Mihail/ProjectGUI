@@ -136,11 +136,11 @@ public class Replays {
 
     private boolean isOnlyRightFilesInDirectory(File @NotNull [] listFiles, String name) {
         boolean test = false;
-        for (int i = 0; i < listFiles.length; i++) {
+        for (int i = 1; i <= listFiles.length; i++) {
             for (File f : listFiles) { // работает до 10 реплеев
-                if (f.getName().equals(name + (i + 1) + ".txt")) { // файлы строго по порядку
+                if (f.getName().equals(name + (i ) + ".txt")) { // файлы строго по порядку
                     System.out.println(f.getName());
-                    System.out.println(name + i + 1 + ".txt");
+                    System.out.println(name + i  + ".txt");
                     System.out.println((f.getName().equals(name + i + 1 + ".txt")));
                     // написать бы еще сортировку...
                     test = true;

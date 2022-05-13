@@ -5,9 +5,11 @@ public class Main {
     private static boolean withReplays = true; // пишем реплеи?
     private static int windowHeight = gridHeight * cellSize;
     private static int windowWidth = gridWidth * cellSize;
+    private static double delayForController = 0.3;
+    private static boolean styleGridWithGrid =false;
 
     public static void main(String[] args) {
-        HelloGL helloGL = new HelloGL(windowWidth, windowHeight, gridWidth, gridHeight, "Snake",cellSize, withReplays);
+        Display helloGL = new Display(windowWidth, windowHeight, gridWidth, gridHeight, "Snake", cellSize, withReplays, delayForController, styleGridWithGrid);
         helloGL.run();
     }
 }

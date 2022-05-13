@@ -12,23 +12,21 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class HelloGL {
+public class Display {
 
-    // какие-то настройки игры
+    // какие-то настройки игры, задаются в main
 
     // The window handle
     private long window;
     private final int width, height;
     private final int gridWidth, gridHeight;
     private final String name;
-    private Wall[] walls;
-    private double delayForController = 0.3;
+    private double delayForController;
     private boolean withReplays;
-    private Replays replay = new Replays();
-    private boolean styleGrid = false;
+    private boolean styleGridWithGrid;
     private int cellSize;
 
-    HelloGL(int width, int height, int gridWidth, int gridHeight, String name, int cellSize, boolean withReplays) {
+    Display(int width, int height, int gridWidth, int gridHeight, String name, int cellSize, boolean withReplays, double delayForController, boolean styleGridWithGrid) {
         this.height = height;
         this.width = width;
         this.name = name;
@@ -36,6 +34,8 @@ public class HelloGL {
         this.gridWidth = gridWidth;
         this.cellSize = cellSize;
         this.withReplays = withReplays;
+        this.delayForController = delayForController;
+        this.styleGridWithGrid = styleGridWithGrid;
     }
 
     public void run() {
@@ -96,26 +96,28 @@ public class HelloGL {
     }
 
     private void loop() {
+        GlDraw glDraw = new GlDraw(gridHeight, gridWidth);
         while (!glfwWindowShouldClose(window)) {
             GL.createCapabilities();
 
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-            GlDraw glDraw = new GlDraw(gridHeight, gridWidth);
 
             // спрашиваем, что хочет пользователь
             // 1 - игра без стен
             // 2 - игра со стенами
             // 3 - просмотр реплея !!! задать номер реплея для просмотра
             // 4 - рандомный уровень игры
+            // P - pause
+            // O - go after pause
             AskUser user = new AskUser(gridHeight, gridWidth);
             ControllerMouse controlMouse = new ControllerMouse(user, window, cellSize, gridHeight, gridWidth);
 
-            while (user.button == 9) { // интерфейс пользователя перед игрой
+            while (user.button == 9) { // // Окно интерфейса с запросом на выбор действия
 
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                 glColor3f(1.0f, 0.0f, 0.0f);
-                glDraw.askUser(user.allButtonsForType);
+                glDraw.askUserInButton(user.allButtonsForType);
                 controlMouse.checkMouse(0);
                 glfwSwapBuffers(window); // swap the color buffers
 
@@ -126,19 +128,37 @@ public class HelloGL {
             } // само окно начала игры
 
             if (user.button == 3) {
+                Replays replay = new Replays();
+                int numberOfReplay = 9;
+                user.addButtonsHorizontal(user.allButtonsForLevel);
+                while (user.level == 9) {  // Окно выбора реплея ! Нужно сделать нормальный запрос на номер реплея
 
-                replay.watchReplayForStr(1); // тут номер реплея
-                SnakesChanges changeForReplay = new SnakesChanges(gridWidth, gridHeight, replay.masOfWalls, replay.bonus.bonusesExist, false);
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+                    glColor3f(1.0f, 1.0f, 0.0f);
+                    glDraw.askUserLevelInButton(user.allButtonsForLevel);
+                    controlMouse.checkMouse(1);
+                    glfwSwapBuffers(window); // swap the color buffers
+
+
+                    // Poll for window events. The key callback above will only be
+                    // invoked during this call.
+                    glfwPollEvents();
+                } // само окно начала игры
+
+                replay.watchReplayForStr(user.level); // тут номер реплея
+                ModelSnake changeForReplay = new ModelSnake(gridWidth, gridHeight, replay.masOfWalls, replay.bonus.bonusesExist, false);
                 Controller controllerForReplays = new Controller(changeForReplay, window, delayForController, replay.allWays); ///////////////
                 try {
-                    while (!glfwWindowShouldClose(window)) {
+                    while (!glfwWindowShouldClose(window)) { // Окно реплея
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-                        if (styleGrid) glDraw.drawGrid();
+                      /*  if (styleGridWithGrid) glDraw.drawGrid();
                         glDraw.drawWalls(changeForReplay.masOfWalls);
                         glDraw.drawBonus(changeForReplay.masOfBonuses[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
 
                         glDraw.drawSnake(changeForReplay);
+                       */
                         controllerForReplays.controllerForReplays();
+                        glDraw.drawGame(styleGridWithGrid, changeForReplay, controllerForReplays);
                         glfwSwapBuffers(window); // swap the color buffers
 
 
@@ -157,21 +177,20 @@ public class HelloGL {
                 AllBonuses allBonuses = new AllBonuses();
                 allBonuses.addRandoBonuses(gridHeight, gridWidth);
 
-                if (user.button == 2) user.addAllQuestionsForLevelOfGameWithWalls();
+                if (user.button == 2) user.addButtonsVertical(user.allButtonsForLevel);
 
                 switch (user.button) {
                     case (1):
-                        walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 0); // пользователь выбирает количество стен или 100
-
+                        user.level = 0;
                         break;
                     case (2):
-                        user.addAllQuestionsForLevelOfGameWithWalls();
-                        while (user.level == 9) { // интерфейс пользователя перед игрой
+                        user.addButtonsVertical(user.allButtonsForLevel);
+                        while (user.level == 9) { // Окно выбора уровня игры
 
                             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                             glColor3f(1.0f, 0.0f, 0.0f);
 
-                            glDraw.askUserLevel(user.allButtonsForLevel);
+                            glDraw.askUserLevelInButton(user.allButtonsForLevel);
                             controlMouse.checkMouse(1);
 
 
@@ -181,46 +200,47 @@ public class HelloGL {
                             // Poll for window events. The key callback above will only be
                             // invoked during this call.
                             glfwPollEvents();
-                        } // само окно начала игры
-
-
-                        walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, user.level * 25);
+                        } // само окно выбора уровня игры со стенами
                         break;
                     case (4):
                         //!!!!!!!!!! сделать картинку с котиком
                         Random rand = new Random();
                         if (rand.nextBoolean()) {
-                            walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, 0); // пользователь выбирает количество стен или 100
+                            user.level = 0;
                         } else {
-                            user.addAllQuestionsForLevelOfGameWithWalls();
+                            user.addButtonsVertical(user.allButtonsForLevel);
+                            //user.addAllQuestionsForLevelOfGameWithWalls();
                             Random random = new Random();
                             user.level = random.nextInt(4);
-
-                            walls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, user.level * 25);
                         }
                         break;
                     default:
                         throw new IllegalArgumentException("Error cant be here" + user.button);
                 }
-                SnakesChanges change = new SnakesChanges(gridWidth, gridHeight, walls, allBonuses.bonusesExist, withReplays);
+
+                ModelSnake change = new ModelSnake(gridWidth, gridHeight, Wall.newRandomWallsForGrid(gridHeight, gridWidth, user.level * 25), allBonuses.bonusesExist, withReplays);
 
                 Controller controller = new Controller(change, window, delayForController, "");
 
-                if (withReplays) replay.writeParameters((walls.length != 0), walls, allBonuses);
+
                 try {
-                    while (!glfwWindowShouldClose(window)) {
+                    Replays replay = new Replays();
+                    if (withReplays) {
+                        replay.writeParameters((change.masOfWalls.length != 0), change.masOfWalls, allBonuses);
+                    }
+                    while (!glfwWindowShouldClose(window)) { // Окно с самой игрой
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-                        if (styleGrid) glDraw.drawGrid();
-                        glDraw.drawWalls(walls);
+                       /* if (styleGridWithGrid) glDraw.drawGrid();
+                        glDraw.drawWalls(change.masOfWalls);
                         glDraw.drawBonus(allBonuses.bonusesExist[change.nowBonus]); // как только бонус съедят, достанем другой из массива
 
-                        glDraw.drawSnake(change);
-
+                        glDraw.drawSnake(change);*/
+                        glDraw.drawGame(styleGridWithGrid, change, controller);
                         glfwSwapBuffers(window); // swap the color buffers
 
                         controller.control();
 
-                        glDraw.drawFPS();
+
                         if (withReplays) replay.writeWays(change.lastWayNotMe, controller.delay); /////////////////////
 
                         // Poll for window events. The key callback above will only be
@@ -231,14 +251,12 @@ public class HelloGL {
                     System.out.println("Game over Your score: " + change.nowBonus * 5);
 
                     // !!!!!!!!!! сделать красивый экран окончания
-
-                    user.addAllQuestionsForEndGame();
-
-                    while (user.end == 9) { // интерфейс пользователя перед игрой
+                    user.addButtonsHorizontal(user.allButtonsOfEndGame);
+                    while (user.end == 9) { // интерфейс после игры
 
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                         glColor3f(1.0f, 1.0f, 0.0f);
-                        glDraw.askUserLevel(user.allButtonsOfEndGame);
+                        glDraw.askUserLevelInButton(user.allButtonsOfEndGame);
                         controlMouse.checkMouse(2);
                         glfwSwapBuffers(window); // swap the color buffers
 
@@ -246,7 +264,7 @@ public class HelloGL {
                         // Poll for window events. The key callback above will only be
                         // invoked during this call.
                         glfwPollEvents();
-                    } // само окно начала игры
+                    }
 
                     if (user.end == user.allButtonsOfEndGame.length) glfwSetWindowShouldClose(window, true);
 

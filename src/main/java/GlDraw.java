@@ -34,7 +34,7 @@ public class GlDraw {
         return (float) (-1.0f + 1.0f / (double) gridHeight * y * 2);
     }
 
-    public void drawWalls(Wall @NotNull [] walls) {
+    private void drawWalls(Wall @NotNull [] walls) {
         glColor3f(0.0f, 0.0f, 1.0f);
         glBegin(GL_LINES);
         for (int i = 0; i < walls.length; i++) {
@@ -44,7 +44,7 @@ public class GlDraw {
         glEnd();
     }
 
-    public void drawBonus(@NotNull Bonus bonus) {
+    private void drawBonus(@NotNull Bonus bonus) {
         double currentTime = glfwGetTime();
         if (currentTime - lastTimeForTakts > 0.01) { // delay всегда один
             takt++;
@@ -76,7 +76,7 @@ public class GlDraw {
         glEnd();
     }
 
-    public void drawSnake(@NotNull SnakesChanges snake) {
+    private void drawSnake(@NotNull ModelSnake snake) {
         for (int i = 0; i < snake.model.arrayOfBodys.size(); i++) {
             glBegin(GL_LINE_LOOP);
             glColor3f(1.0f, 0.0f, 0.0f);
@@ -86,8 +86,6 @@ public class GlDraw {
             }
             glEnd();
         }
-
-
     }
 
     public void drawFPS() {
@@ -101,7 +99,7 @@ public class GlDraw {
         }
     }
 
-    public void drawGrid() {// функция, которая отрисовывает сетку
+    private void drawGrid() {// функция, которая отрисовывает сетку
         glColor3f(0.32f, 0.32f, 0.32f);
         glBegin(GL_LINES);
         for (int i = 0; i < gridHeight; i += 2.5) {
@@ -115,7 +113,7 @@ public class GlDraw {
         glEnd();
     }
 
-    public void askUser(Button @NotNull [] user) {
+    public void askUserInButton(Button @NotNull [] user) {
 
         for (int i = 0; i < user.length; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
@@ -129,7 +127,7 @@ public class GlDraw {
 
     }
 
-    public void askUserLevel(Button @NotNull [] user) {
+    public void askUserLevelInButton(Button @NotNull [] user) {
         for (int i = 0; i < user.length; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
             glColor3f(1.0f, 0.0f, 0.0f);
@@ -139,6 +137,14 @@ public class GlDraw {
             glVertex2f(convertX(user[i].x4), convertY(user[i].y4));
             glEnd();
         }
+    }
+
+    public void drawGame(boolean styleGridWithGrid, ModelSnake changeForReplay, Controller controller) {
+        if (styleGridWithGrid) drawGrid();
+        drawWalls(changeForReplay.masOfWalls);
+        drawBonus(changeForReplay.masOfBonuses[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
+
+        drawSnake(changeForReplay);
     }
 
 

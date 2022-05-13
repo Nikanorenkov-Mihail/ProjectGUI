@@ -20,19 +20,15 @@ public class ControllerMouse {
     public void checkMouse(int us) {
         glfwSetCursorPosCallback(window1, (window1, posX, posY) -> {
 
-            glfwSetKeyCallback(window1, (window, key, scancode, action, mods) -> {
-                if (key == GLFW_KEY_ESCAPE) stop(window);
-            });
-
             glfwSetMouseButtonCallback(window1, (window, button, action, mods) -> {
                 if (button == GLFW_MOUSE_BUTTON_LEFT) {
                     if (us == 0) {
-                        user.button = user.clickOnButton3(posX / cellSize, gridHeight - (posY / cellSize)) + 1;
+                        user.button = user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), user.allButtonsForType) + 1;
                     } else if (us == 1) {
-                        user.level = user.clickOnButton1(posX / cellSize, gridHeight - (posY / cellSize)) + 1;
+                        user.level = user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), user.allButtonsForLevel) + 1;
 
                     } else if (us == 2) {
-                        user.end = user.clickOnButton2(posX / cellSize, gridHeight - (posY / cellSize)) + 1;
+                        user.end = user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), user.allButtonsOfEndGame) + 1;
                     }
                 }
 
@@ -42,9 +38,6 @@ public class ControllerMouse {
 
     }
 
-    public void controlForLevels() {
-
-    }
 
     private void stop(long wind) {
         glfwSetWindowShouldClose(wind, true);

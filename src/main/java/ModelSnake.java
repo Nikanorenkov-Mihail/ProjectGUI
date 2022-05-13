@@ -1,6 +1,6 @@
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
-public class SnakesChanges {
+public class ModelSnake {
     int gridWidth;
     int gridHeight;
     SnakeModel model = new SnakeModel(10, 10);
@@ -13,7 +13,7 @@ public class SnakesChanges {
     boolean wayIntoMe = false;
     boolean withReplays;
 
-    public SnakesChanges(int gridWidth, int gridHeight, Wall[] masOfWalls, Bonus[] masOfBonuses, boolean withReplays) {
+    public ModelSnake(int gridWidth, int gridHeight, Wall[] masOfWalls, Bonus[] masOfBonuses, boolean withReplays) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         this.masOfWalls = masOfWalls;
@@ -93,7 +93,7 @@ public class SnakesChanges {
         isNewWayNotSnake();
     }
 
-    public void way(int newWay) {
+    private void way(int newWay) {
         switch (newWay) {
             case (0): // up
 
