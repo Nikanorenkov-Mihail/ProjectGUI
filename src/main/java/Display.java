@@ -230,21 +230,12 @@ public class Display {
                     }
                     while (!glfwWindowShouldClose(window)) { // Окно с самой игрой
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-                       /* if (styleGridWithGrid) glDraw.drawGrid();
-                        glDraw.drawWalls(change.masOfWalls);
-                        glDraw.drawBonus(allBonuses.bonusesExist[change.nowBonus]); // как только бонус съедят, достанем другой из массива
 
-                        glDraw.drawSnake(change);*/
                         glDraw.drawGame(styleGridWithGrid, change, controller);
                         glfwSwapBuffers(window); // swap the color buffers
-
                         controller.control();
-
-
                         if (withReplays) replay.writeWays(change.lastWayNotMe, controller.delay); /////////////////////
 
-                        // Poll for window events. The key callback above will only be
-                        // invoked during this call.
                         glfwPollEvents();
                     }
                 } catch (IllegalArgumentException e) {
@@ -252,20 +243,16 @@ public class Display {
 
                     // !!!!!!!!!! сделать красивый экран окончания
                     user.addButtonsHorizontal(user.allButtonsOfEndGame);
-                    while (user.end == 9) { // интерфейс после игры
-
+                    while (user.end == 9) { // Окно выбора действия после игры (1 - основное меню; 2 - выход из игры)
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                         glColor3f(1.0f, 1.0f, 0.0f);
+
                         glDraw.askUserLevelInButton(user.allButtonsOfEndGame);
                         controlMouse.checkMouse(2);
                         glfwSwapBuffers(window); // swap the color buffers
 
-
-                        // Poll for window events. The key callback above will only be
-                        // invoked during this call.
                         glfwPollEvents();
                     }
-
                     if (user.end == user.allButtonsOfEndGame.length) glfwSetWindowShouldClose(window, true);
 
                 }
