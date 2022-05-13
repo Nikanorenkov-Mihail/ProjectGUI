@@ -159,6 +159,7 @@ public class AskUser {
         }
         return 9;
     }
+
     public int clickOnButton3(double clickX, double clickY) {
         for (int i = 0; i < allButtonsForType.length; i++) {
             System.out.println(allButtonsForType[i].x1 + " " + allButtonsForType[i].y1);
