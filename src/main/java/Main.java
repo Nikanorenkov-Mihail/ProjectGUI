@@ -9,6 +9,7 @@ public class Main {
     private static boolean styleGridWithGrid =false;
 
     public static void main(String[] args) {
+        System.out.println("name10.txt".equals("name" + 10 + ".txt"));
         Display helloGL = new Display(windowWidth, windowHeight, gridWidth, gridHeight, "Snake", cellSize, withReplays, delayForController, styleGridWithGrid);
         helloGL.run();
     }

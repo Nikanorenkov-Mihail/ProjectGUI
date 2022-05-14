@@ -137,7 +137,7 @@ public class Display {
                 user.addButtonsHorizontal(user.allButtonsForLevel);
                 windowUserInterfaceHorizontalButton(1, user.allButtonsForLevel, glDraw, user, controlMouse);
 
-               // while (user.level == 9) {  // Окно выбора реплея ! Нужно сделать нормальный запрос на номер реплея
+                // while (user.level == 9) {  // Окно выбора реплея ! Нужно сделать нормальный запрос на номер реплея
 /*
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                     glColor3f(1.0f, 1.0f, 0.0f);
@@ -151,8 +151,8 @@ public class Display {
                     glfwPollEvents();
 
  */
-                    windowUserInterfaceHorizontalButton(1,user.allButtonsForLevel,glDraw, user, controlMouse);
-               // } // само окно начала игры
+                windowUserInterfaceHorizontalButton(1, user.allButtonsForLevel, glDraw, user, controlMouse);
+                // } // само окно начала игры
 
                 replay.watchReplayForStr(user.level); // тут номер реплея
                 ModelSnake changeForReplay = new ModelSnake(gridWidth, gridHeight, replay.masOfWalls, false);
@@ -193,7 +193,7 @@ public class Display {
 
                         glfwPollEvents();
                     }*/
-                    windowUserInterfaceHorizontalButton(2,user.allButtonsOfEndGame,glDraw, user, controlMouse);
+                    windowUserInterfaceHorizontalButton(2, user.allButtonsOfEndGame, glDraw, user, controlMouse);
                 }
                 // !!!!!!!!!! сделать красивый экран окончания
 
@@ -208,7 +208,8 @@ public class Display {
                         break;
                     case (2):
                         user.addButtonsVertical(user.allButtonsForLevel);
-                        while (user.level == 9) { // Окно выбора уровня игры
+                        windowUserInterfaceVerticalButton(1, user.allButtonsForLevel, glDraw, user, controlMouse);
+                        /*while (user.level == 9) { // Окно выбора уровня игры
 
                             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
                             glColor3f(1.0f, 0.0f, 0.0f);
@@ -223,7 +224,7 @@ public class Display {
                             // Poll for window events. The key callback above will only be
                             // invoked during this call.
                             glfwPollEvents();
-                        } // само окно выбора уровня игры со стенами
+                        } // само окно выбора уровня игры со стенами*/
                         break;
                     case (4):
                         //!!!!!!!!!! сделать картинку с котиком
@@ -281,7 +282,7 @@ public class Display {
                     }
 */
 
-                    windowUserInterfaceHorizontalButton(2,user.allButtonsOfEndGame,glDraw, user, controlMouse);
+                    windowUserInterfaceHorizontalButton(2, user.allButtonsOfEndGame, glDraw, user, controlMouse);
 
                 }
 
@@ -291,13 +292,9 @@ public class Display {
             //user.level = 9;
             //user.button = 9;
             //user.end = 9;
+            isGameClose(user, controlMouse);
 
 
-            if (user.end == user.allButtonsOfEndGame.length) glfwSetWindowShouldClose(window, true);
-            else if (user.end == 1) {
-                user = new AskUser(gridHeight, gridWidth);
-                controlMouse = new ControllerMouse(user, window, cellSize, gridHeight, gridWidth);
-            }
         }
 
     }
@@ -339,16 +336,29 @@ public class Display {
         }
     }
 
-    private void windowUserInterfaceVerticalButton( int arg, Button[] masOfButton, GlDraw glDraw, @NotNull AskUser user, ControllerMouse controlMouse) {
+    private void windowUserInterfaceVerticalButton(int arg, Button[] masOfButton, GlDraw glDraw, @NotNull AskUser user, ControllerMouse controlMouse) {
         user.addButtonsVertical(user.allButtonsForLevel);
-        while (user.level == 9) { // Окно выбора уровня игры
+        int counter = 9;
+
+        while (counter == 9) { // Окно выбора уровня игры
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             glColor3f(1.0f, 0.0f, 0.0f);
 
-            glDraw.askUserLevelInButton(user.allButtonsForLevel);
-            controlMouse.checkMouse(1, user.allButtonsForLevel);
+            glDraw.askUserLevelInButton(masOfButton);
+            controlMouse.checkMouse(arg, masOfButton);
+            switch (arg) {
+                case (0):
+                    counter = user.button;
+                    break;
+                case (1):
+                    counter = user.level;
+                    break;
+                case (2):
+                    counter = user.end;
+                    break;
 
+            }
 
             glfwSwapBuffers(window); // swap the color buffers
 
@@ -364,16 +374,37 @@ public class Display {
 
         // !!!!!!!!!! сделать красивый экран окончания
         user.addButtonsHorizontal(masOfButton);
-
-        while (user.end == 9) { // Окно выбора действия после игры (1 - основное меню; 2 - выход из игры)
+        int counter = 9;
+        while (counter == 9) { // Окно выбора действия после игры (1 - основное меню; 2 - выход из игры)
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             glColor3f(1.0f, 1.0f, 0.0f);
 
             glDraw.askUserLevelInButton(masOfButton);
             controlMouse.checkMouse(arg, masOfButton);
+
+            switch (arg) {
+                case (0):
+                    counter = user.button;
+                    break;
+                case (1):
+                    counter = user.level;
+                    break;
+                case (2):
+                    counter = user.end;
+                    break;
+
+            }
             glfwSwapBuffers(window); // swap the color buffers
 
             glfwPollEvents();
+        }
+    }
+
+    private void isGameClose(@NotNull AskUser user, ControllerMouse controlMouse) {
+        if (user.end == user.allButtonsOfEndGame.length) glfwSetWindowShouldClose(window, true);
+        else if (user.end == 1) {
+            user = new AskUser(gridHeight, gridWidth);
+            controlMouse = new ControllerMouse(user, window, cellSize, gridHeight, gridWidth);
         }
     }
 }

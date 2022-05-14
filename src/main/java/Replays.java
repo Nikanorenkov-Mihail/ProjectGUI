@@ -83,7 +83,6 @@ public class Replays {
                     y2 = Integer.parseInt(line.split(" ")[3]);
                     masOfWalls[counter] = new Wall(x1, y1, x2, y2);
                     counter++;
-                    System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
                     line = br.readLine();
                 }
             } else if (line.split(" ")[0].equals("f")) {
@@ -103,7 +102,6 @@ public class Replays {
                 line = br.readLine();
             }
             line = br.readLine();
-            counter = 0; // теперь используется для ходов
             while (line != null) { // записываем ходы
                 allWays += line;
                 line = br.readLine();
@@ -141,12 +139,8 @@ public class Replays {
     private boolean isOnlyRightFilesInDirectory(File @NotNull [] listFiles, String name) {
         boolean test = false;
         for (int i = 1; i <= listFiles.length; i++) {
-            for (File f : listFiles) { // работает до 10 реплеев
-                if (f.getName().equals(name + (i) + ".txt")) { // файлы строго по порядку
-                    System.out.println(f.getName());
-                    System.out.println(name + i + ".txt");
-                    System.out.println((f.getName().equals(name + i + 1 + ".txt")));
-                    // написать бы еще сортировку...
+            for (File f : listFiles) {
+                if (f.getName().equals(name + (i) + ".txt")) { // файлы не строго по порядку
                     test = true;
                     break;
                 }
