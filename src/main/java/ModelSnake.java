@@ -3,7 +3,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
 public class ModelSnake {
     int gridWidth;
     int gridHeight;
-    SnakeModel model = new SnakeModel(10, 10);
+    SnakeModel model = new SnakeModel(10, 10); // тут стартует змейка
     Wall[] masOfWalls;
     Bonus[] masOfBonuses;
     int nowBonus = 0;

@@ -14,7 +14,7 @@ public class Replays {
     AllBonuses bonus;
     String allWays = "";
     String nameForReplayFile;
-    String fileDirectory = "Replays"; // тут можно поменять имя папки для просмотра реплеев
+    static String fileDirectory = "Replays"; // тут можно поменять имя папки для просмотра реплеев
     String name = "Replay";
 
     public Replays(int gridHight, int gridWidth) {
@@ -164,4 +164,14 @@ public class Replays {
         return true;
     }
 
+    public static int numberOfReplays() {
+        File dir = new File(fileDirectory);
+        if (!dir.isDirectory() || !dir.exists()) {
+            return 0;
+        }
+
+        File[] listFiles = dir.listFiles();
+        return listFiles.length;
+
+    }
 }

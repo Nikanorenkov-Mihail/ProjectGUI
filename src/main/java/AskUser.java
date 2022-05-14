@@ -10,10 +10,12 @@ public class AskUser { // Модель пользователя для инте�
     Button[] allButtonsForType = new Button[4]; // меняем количество кнопок
     Button[] allButtonsForLevel = new Button[5];
     Button[] allButtonsOfEndGame = new Button[2];
+    Button[] allButtonsOfReplays = new Button[Replays.numberOfReplays()];
     private int gridHeight, gridWidth;
     int button = 9;
     int level = 9;
     int end = 9;
+    int numberOfReplay = 9;
 
     public AskUser(int gridHeight, int gridWidth) {
         this.gridHeight = gridHeight;
@@ -32,6 +34,8 @@ public class AskUser { // Модель пользователя для инте�
             case (2):
                 end = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
                 break;
+            case (3):
+                numberOfReplay = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
             default:
                 return 9;
         }
@@ -70,5 +74,9 @@ public class AskUser { // Модель пользователя для инте�
 
         }
         return 9;
+    }
+
+    public boolean isRightNumber(int numberOfReplay) {
+        return numberOfReplay > 0 && numberOfReplay <= Replays.numberOfReplays();
     }
 }
