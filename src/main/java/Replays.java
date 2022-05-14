@@ -6,21 +6,25 @@ import java.util.Arrays;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Replays {
+    int gridHight, gridWidth;
     StringBuilder result = new StringBuilder();
     double timeForTakts = 0.0;
     int simInLine = 0;
     Wall[] masOfWalls;
-    AllBonuses bonus = new AllBonuses();
+    AllBonuses bonus;
     String allWays = "";
     String nameForReplayFile;
     String fileDirectory = "Replays"; // тут можно поменять имя папки для просмотра реплеев
     String name = "Replay";
 
-    public Replays() {
+    public Replays(int gridHight, int gridWidth) {
+        this.gridWidth = gridWidth;
+        this.gridHight = gridHight;
+        bonus = new AllBonuses(gridHight, gridWidth);
         nameForReplayFile = searchNewNameForReplayFile();
     }
 
-    public void writeParameters(boolean withWalls, Wall[] walls, AllBonuses bonuses) {
+    public void writeParameters(boolean withWalls, Wall[] walls, Bonus[] bonuses) {
         if (withWalls) {
             result.append("t ").append(walls.length).append("\n");
             for (int i = 0; i < walls.length; i++) {
@@ -28,9 +32,9 @@ public class Replays {
                 result.append(walls[i].x2).append(" ").append(walls[i].y2).append("\n");
             }
         } else result.append("f").append("\n");
-        result.append("b ").append(bonuses.bonusesExist.length).append("\n");
-        for (int i = 0; i < bonuses.bonusesExist.length; i++) {
-            result.append(bonuses.bonusesExist[i].x).append(" ").append(bonuses.bonusesExist[i].y).append("\n");
+        result.append("b ").append(bonuses.length).append("\n");
+        for (int i = 0; i < bonuses.length; i++) {
+            result.append(bonuses[i].x).append(" ").append(bonuses[i].y).append("\n");
         }
         result.append("GO").append("\n");
     }
@@ -138,9 +142,9 @@ public class Replays {
         boolean test = false;
         for (int i = 1; i <= listFiles.length; i++) {
             for (File f : listFiles) { // работает до 10 реплеев
-                if (f.getName().equals(name + (i ) + ".txt")) { // файлы строго по порядку
+                if (f.getName().equals(name + (i) + ".txt")) { // файлы строго по порядку
                     System.out.println(f.getName());
-                    System.out.println(name + i  + ".txt");
+                    System.out.println(name + i + ".txt");
                     System.out.println((f.getName().equals(name + i + 1 + ".txt")));
                     // написать бы еще сортировку...
                     test = true;

@@ -5,7 +5,8 @@ import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glColor3f;
 
-public class AskUser {
+public class AskUser { // Модель пользователя для интерфейса
+    // Объект пользователь создается каждый раз после игры
     Button[] allButtonsForType = new Button[4]; // меняем количество кнопок
     Button[] allButtonsForLevel = new Button[5];
     Button[] allButtonsOfEndGame = new Button[2];
@@ -18,6 +19,23 @@ public class AskUser {
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
         addButtonsVertical(allButtonsForType);
+    }
+
+    public int argument(int arg, double posX, double posY, int cellSize, Button[] allButtons) {
+        switch (arg) {
+            case (0):
+                button = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
+                break;
+            case (1):
+                level = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
+                break;
+            case (2):
+                end = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
+                break;
+            default:
+                return 9;
+        }
+        return 9;
     }
 
     public void addButtonsVertical(Button @NotNull [] allButtons) {
@@ -52,22 +70,5 @@ public class AskUser {
 
         }
         return 9;
-    }
-
-    public int startWindow(GlDraw glDraw, @NotNull AskUser user, ControllerMouse controlMouse) {
-        while (user.button == 9) { // интерфейс пользователя перед игрой
-
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-            glColor3f(1.0f, 0.0f, 0.0f);
-            glDraw.askUserInButton(user.allButtonsForType);
-            controlMouse.checkMouse(0);
-            glfwSwapBuffers(controlMouse.window1); // swap the color buffers
-
-
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
-        } // само окно начала игры
-        return 1;
     }
 }

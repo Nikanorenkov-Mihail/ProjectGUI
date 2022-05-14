@@ -17,11 +17,12 @@ public class ControllerMouse {
         this.gridWidth = gridWidth;
     }
 
-    public void checkMouse(int us) {
+    public void checkMouse(int arg, Button[] masOfButtons) {
         glfwSetCursorPosCallback(window1, (window1, posX, posY) -> {
 
             glfwSetMouseButtonCallback(window1, (window, button, action, mods) -> {
-                if (button == GLFW_MOUSE_BUTTON_LEFT) {
+                user.argument(arg, posX, posY, cellSize, masOfButtons);
+               /* if (button == GLFW_MOUSE_BUTTON_LEFT) {
                     if (us == 0) {
                         user.button = user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), user.allButtonsForType) + 1;
                     } else if (us == 1) {
@@ -30,7 +31,7 @@ public class ControllerMouse {
                     } else if (us == 2) {
                         user.end = user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), user.allButtonsOfEndGame) + 1;
                     }
-                }
+                }*/
 
             });
         });

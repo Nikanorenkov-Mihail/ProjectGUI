@@ -13,14 +13,15 @@ public class ModelSnake {
     boolean wayIntoMe = false;
     boolean withReplays;
 
-    public ModelSnake(int gridWidth, int gridHeight, Wall[] masOfWalls, Bonus[] masOfBonuses, boolean withReplays) {
+    public ModelSnake(int gridWidth, int gridHeight, Wall[] masOfWalls, boolean withReplays) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         this.masOfWalls = masOfWalls;
-        this.masOfBonuses = masOfBonuses;
+        this.masOfBonuses =  new AllBonuses(gridHeight, gridWidth).bonusesExist;;
         this.withReplays = withReplays;
         wallsWithBonus();
         startPointInWall();
+
     }
 
     private void wallsWithBonus() { // бонусы не попадают на стены
