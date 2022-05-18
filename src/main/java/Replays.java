@@ -17,10 +17,11 @@ public class Replays {
     static String fileDirectory = "Replays"; // тут можно поменять имя папки для просмотра реплеев
     String name = "Replay";
 
+
     public Replays(int gridHight, int gridWidth) {
         this.gridWidth = gridWidth;
         this.gridHight = gridHight;
-        bonus = new AllBonuses(gridHight, gridWidth);
+        bonus = new AllBonuses();
         nameForReplayFile = searchNewNameForReplayFile();
     }
 
@@ -59,11 +60,9 @@ public class Replays {
     }
 
     public void watchReplayForStr(int numberOfReplay) {
-
+        if (!AskUser.isRightNumber(numberOfReplay)) throw new IllegalArgumentException("Wrong number of replay");
         try {
             int counter = 0;
-            File dir = new File(fileDirectory);
-            File[] listFiles = dir.listFiles();
 
             BufferedReader br = new BufferedReader(new FileReader(fileDirectory + "/" + name + numberOfReplay + ".txt"));
             String line = br.readLine();

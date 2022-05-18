@@ -1,5 +1,7 @@
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.opengl.GL11.*;
@@ -7,7 +9,7 @@ import static org.lwjgl.opengl.GL11.glColor3f;
 
 public class AskUser { // Модель пользователя для интерфейса
     // Объект пользователь создается каждый раз после игры
-    Button[] allButtonsForType = new Button[4]; // меняем количество кнопок
+    Button[] allButtonsForType = new Button[4]; // можем менять количество кнопок
     Button[] allButtonsForLevel = new Button[5];
     Button[] allButtonsOfEndGame = new Button[2];
     Button[] allButtonsOfReplays = new Button[Replays.numberOfReplays()];
@@ -24,21 +26,18 @@ public class AskUser { // Модель пользователя для инте�
     }
 
     public int argument(int arg, double posX, double posY, int cellSize, Button[] allButtons) {
-        switch (arg) {
-            case (0):
-                button = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
-                break;
-            case (1):
-                level = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
-                break;
-            case (2):
-                end = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
-                break;
-            case (3):
-                numberOfReplay = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
-            default:
-                return 9;
+
+        if (arg == 0) {
+            button = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
+        } else if (arg == 1) {
+            level = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
+
+        } else if (arg == 2) {
+            end = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
+        } else if (arg == 3) {
+            numberOfReplay = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
         }
+
         return 9;
     }
 
@@ -63,20 +62,37 @@ public class AskUser { // Модель пользователя для инте�
 
     public int clickOnButton(double clickX, double clickY, Button @NotNull [] allButtons) {
         for (int i = 0; i < allButtons.length; i++) {
-            System.out.println(allButtons[i].x1 + " " + allButtons[i].y1);
-            System.out.println(clickX + " " + clickY);
             if (clickX >= allButtons[i].x1 && clickX <= allButtons[i].x2) {
                 if (clickY >= allButtons[i].y4 && clickY <= allButtons[i].y2) {
                     return i;
                 }
-
             }
-
         }
         return 9;
     }
 
-    public boolean isRightNumber(int numberOfReplay) {
+    public static boolean isRightNumber(int numberOfReplay) {
         return numberOfReplay > 0 && numberOfReplay <= Replays.numberOfReplays();
+    }
+
+    public void whatButtonInStart(@NotNull AskUser user) {
+        switch (user.button) {
+            case (1):
+                user.level = 0;
+                break;
+            case (4):
+                //!!!!!!!!!! сделать картинку с котиком
+                Random rand = new Random();
+                if (rand.nextBoolean()) {
+                    user.level = 0; // игра без стен
+                } else {
+                    user.addButtonsVertical(user.allButtonsForLevel);
+                    Random random = new Random();
+                    user.level = random.nextInt(4);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Error cant be here" + user.button);
+        }
     }
 }

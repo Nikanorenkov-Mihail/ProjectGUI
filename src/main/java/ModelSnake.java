@@ -9,20 +9,44 @@ public class ModelSnake {
     int nowBonus = 0;
     int lastWay = 0;
     int lastWayNotMe = 0; //last command
-    boolean noCommands = true;
+
     boolean wayIntoMe = false;
     boolean withReplays;
+    String allWays = "";
 
-    public ModelSnake(int gridWidth, int gridHeight, Wall[] masOfWalls, boolean withReplays) {
+    public ModelSnake(int gridWidth, int gridHeight, boolean withReplays) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
-        this.masOfWalls = masOfWalls;
-        this.masOfBonuses =  new AllBonuses(gridHeight, gridWidth).bonusesExist;;
+        //this.masOfWalls = masOfWalls;
+        //this.masOfBonuses = new Bonus[10];//new AllBonuses(gridHeight, gridWidth).bonusesExist;
         this.withReplays = withReplays;
-        wallsWithBonus();
-        startPointInWall();
+        //wallsWithBonus();
+        //startPointInWall();
 
     }
+
+    public void gameOrReplay(boolean isReplay, AskUser user) {
+        if (isReplay) {
+            Replays replay = new Replays(gridHeight, gridWidth);
+
+            replay.watchReplayForStr(user.numberOfReplay); // тут номер реплея
+
+            this.allWays = replay.allWays;
+            //функция задает змейке, в которой будут все записанные стены, бонусы и передвижения
+            this.masOfWalls = replay.masOfWalls;
+            this.masOfBonuses = replay.bonus.bonusesExist;
+
+        } else {
+            this.masOfWalls = Wall.newRandomWallsForGrid(gridHeight, gridWidth, user.level * 25);
+            AllBonuses bonuses = new AllBonuses();
+            bonuses.addRandoBonuses(gridHeight, gridWidth);
+            this.masOfBonuses = bonuses.bonusesExist;
+            wallsWithBonus();
+            startPointInWall();
+        }
+
+    }
+
 
     private void wallsWithBonus() { // бонусы не попадают на стены
         for (int naVsykyiSluchay = 0; naVsykyiSluchay < 10; naVsykyiSluchay++) {

@@ -114,10 +114,10 @@ public class GlDraw {
     }
 
     public void askUserInButton(Button @NotNull [] user) {
-
+        glColor3f(0.0f, 1.0f, 0.0f);
         for (int i = 0; i < user.length; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
-            glColor3f(0.0f, 1.0f, 0.0f);
+
             glVertex2f(convertX(user[i].x1), convertY(user[i].y1));
             glVertex2f(convertX(user[i].x2), convertY(user[i].y2));
             glVertex2f(convertX(user[i].x3), convertY(user[i].y3));
@@ -128,9 +128,10 @@ public class GlDraw {
     }
 
     public void askUserLevelInButton(Button @NotNull [] user) {
+        glColor3f(1.0f, 0.0f, 0.0f);
         for (int i = 0; i < user.length; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
-            glColor3f(1.0f, 0.0f, 0.0f);
+
             glVertex2f(convertX(user[i].x1), convertY(user[i].y1));
             glVertex2f(convertX(user[i].x2), convertY(user[i].y2));
             glVertex2f(convertX(user[i].x3), convertY(user[i].y3));
@@ -139,7 +140,7 @@ public class GlDraw {
         }
     }
 
-    public void drawGame(boolean styleGridWithGrid, ModelSnake changeForReplay, Controller controller) {
+    public void drawGame(boolean styleGridWithGrid, ModelSnake changeForReplay) {
         if (styleGridWithGrid) drawGrid();
         drawWalls(changeForReplay.masOfWalls);
         drawBonus(changeForReplay.masOfBonuses[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
