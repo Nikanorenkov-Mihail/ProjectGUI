@@ -14,7 +14,7 @@ public class Replays {
     AllBonuses bonus;
     String allWays = "";
     String nameForReplayFile;
-    static String fileDirectory = "Replays"; // тут можно поменять имя папки для просмотра реплеев
+    private final static String fileDirectory = "Replays"; // тут можно поменять имя папки для просмотра реплеев
     String name = "Replay";
 
 

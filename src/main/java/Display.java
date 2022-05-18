@@ -33,7 +33,15 @@ public class Display {
     private ModelSnake changeModel;
     private Controller controller;
 
-    Display(int width, int height, int gridWidth, int gridHeight, String name, int cellSize, boolean withReplays, double delayForController, boolean styleGridWithGrid, GlDraw glDraw,
+    Display(int width, int height,
+            int gridWidth,
+            int gridHeight,
+            String name,
+            int cellSize,
+            boolean withReplays,
+            double delayForController,
+            boolean styleGridWithGrid,
+            GlDraw glDraw,
             AskUser user,
             ControllerMouse controlMouse,
             ModelSnake changeModel,
@@ -51,7 +59,7 @@ public class Display {
         this.user = user;
         this.controlMouse = controlMouse;
         this.changeModel = changeModel;
-        this.controller = controller; ///////////////
+        this.controller = controller;
     }
 
     public void run() {
