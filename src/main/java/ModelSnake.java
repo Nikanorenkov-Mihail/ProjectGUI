@@ -14,7 +14,7 @@ public class ModelSnake {
     boolean withReplays;
     String allWays = "";
 
-    public ModelSnake(int gridWidth, int gridHeight, boolean withReplays) {
+    public ModelSnake( int gridHeight,int gridWidth, boolean withReplays) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         //this.masOfWalls = masOfWalls;
@@ -25,7 +25,7 @@ public class ModelSnake {
 
     }
 
-    public void gameOrReplay(boolean isReplay, AskUser user) {
+    public void gameOrReplay(boolean isReplay, ModelUser user) {
         if (isReplay) {
             Replays replay = new Replays(gridHeight, gridWidth);
 
@@ -97,6 +97,8 @@ public class ModelSnake {
         }
     }
 
+
+
     private void isBonusHere() {
         if (Functions.isBonusForSnake(masOfBonuses[nowBonus], model.getHeadXAndY())) {
             nowBonus++;
@@ -107,6 +109,7 @@ public class ModelSnake {
     }
 
     public void newWay() {
+        if (lastWay == 10){  throw new IllegalArgumentException("out");}
         if (masOfWalls.length == 0) {
             way(lastWay);
             isBonusHere();

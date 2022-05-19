@@ -28,7 +28,7 @@ public class Display {
     private final boolean styleGridWithGrid;
     private final int cellSize;
     private final GlDraw glDraw;
-    private AskUser user;
+    private ModelUser user;
     private ControllerMouse controlMouse;
     private ModelSnake changeModel;
     private Controller controller;
@@ -42,7 +42,7 @@ public class Display {
             double delayForController,
             boolean styleGridWithGrid,
             GlDraw glDraw,
-            AskUser user,
+            ModelUser user,
             ControllerMouse controlMouse,
             ModelSnake changeModel,
             Controller controller) {
@@ -144,19 +144,22 @@ public class Display {
             windowUserInterfaceVerticalButton(0, user.allButtonsForType, glDraw, user, controlMouse);
 
             if (user.button == 3) {
-                user.addButtonsHorizontal(user.allButtonsOfReplays);
-                windowUserInterfaceHorizontalButton(3, user.allButtonsOfReplays, glDraw, user, controlMouse);
+                if (Replays.numberOfReplays() == 0) {
+                    System.out.println("Directory with replays is empty");
 
-                changeModel.gameOrReplay(true, user);
+                } else {
+                    user.addButtonsHorizontal(user.allButtonsOfReplays);
+                    windowUserInterfaceHorizontalButton(3, user.allButtonsOfReplays, glDraw, user, controlMouse);
 
-                try {
-                    windowWithReplay(changeModel, glDraw, controller);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Game over Your score: " + changeModel.nowBonus * 5);
+                    changeModel.gameOrReplay(true, user); // модель для реплея и игры общая, функция лишь меняет некоторые параметры
+
+                    try {
+                        windowWithReplay(changeModel, glDraw, controller);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Game over Your score: " + ((changeModel.nowBonus == 0) ? 1 : changeModel.nowBonus * 5));
+                    }
+                    // !!!!!!!!!! сделать красивый экран окончания
                 }
-                windowUserInterfaceHorizontalButton(2, user.allButtonsOfEndGame, glDraw, user, controlMouse);
-                // !!!!!!!!!! сделать красивый экран окончания
-
             } else {
                 if (user.button == 2) {
                     user.addButtonsVertical(user.allButtonsForLevel);
@@ -170,20 +173,19 @@ public class Display {
                 try {
                     windowWithGame(changeModel, glDraw, controller);
                 } catch (IllegalArgumentException e) {
-                    System.out.println("Game over Your score: " + changeModel.nowBonus * 5);
+                    System.out.println("Game over Your score: " + ((changeModel.nowBonus == 0) ? 1 : changeModel.nowBonus * 5));
                 }
-                windowUserInterfaceHorizontalButton(2, user.allButtonsOfEndGame, glDraw, user, controlMouse);
             }
+            windowUserInterfaceHorizontalButton(2, user.allButtonsOfEndGame, glDraw, user, controlMouse);
 
-            if (user.end == user.allButtonsOfEndGame.length) glfwSetWindowShouldClose(window, true); // новая игра, возвращаем все модели к первоначальному состоянию
+            if (user.end == user.allButtonsOfEndGame.length)
+                glfwSetWindowShouldClose(window, true);
             else if (user.end == 1) {
-                user = new AskUser(gridHeight, gridWidth);
-                changeModel = new ModelSnake(gridHeight, gridWidth, withReplays);
-                controlMouse = new ControllerMouse(user, cellSize, gridHeight, gridWidth);
-                controller = new Controller(changeModel, delayForController);
+                toStartValue(); // новая игра, возвращаем все модели к первоначальному состоянию
             }
         }
     }
+    // на каждое действие после выбора пользователя новое окно(сцена)
 
     private void windowWithGame(ModelSnake change, GlDraw glDraw, Controller controller) {
         Replays replay = new Replays(gridHeight, gridWidth);
@@ -218,7 +220,7 @@ public class Display {
         }
     }
 
-    private void windowUserInterfaceVerticalButton(int arg, Button[] masOfButton, GlDraw glDraw, @NotNull AskUser user, ControllerMouse controlMouse) {
+    private void windowUserInterfaceVerticalButton(int arg, Button[] masOfButton, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse) {
         user.addButtonsVertical(user.allButtonsForLevel);
         int counter = 9;
 
@@ -254,7 +256,7 @@ public class Display {
         } // само окно выбора уровня игры со стенами
     }
 
-    private void windowUserInterfaceHorizontalButton(int arg, Button[] masOfButton, GlDraw glDraw, @NotNull AskUser user, ControllerMouse controlMouse) {
+    private void windowUserInterfaceHorizontalButton(int arg, Button[] masOfButton, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse) {
 
 
         // !!!!!!!!!! сделать красивый экран окончания
@@ -289,4 +291,13 @@ public class Display {
         }
     }
 
+    private void toStartValue() {
+        System.out.println(gridHeight + " " + gridWidth);
+        user = new ModelUser(gridHeight, gridWidth);
+        changeModel = new ModelSnake(gridHeight, gridWidth, withReplays);
+        controlMouse = new ControllerMouse(user, cellSize, gridHeight, gridWidth);
+        controller = new Controller(changeModel, delayForController);
+
+        System.out.println(changeModel.gridHeight + " " + changeModel.gridWidth);
+    }
 }

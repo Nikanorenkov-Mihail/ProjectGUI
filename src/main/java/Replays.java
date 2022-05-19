@@ -60,7 +60,7 @@ public class Replays {
     }
 
     public void watchReplayForStr(int numberOfReplay) {
-        if (!AskUser.isRightNumber(numberOfReplay)) throw new IllegalArgumentException("Wrong number of replay");
+        if (!ModelUser.isRightNumber(numberOfReplay)) throw new IllegalArgumentException("Wrong number of replay");
         try {
             int counter = 0;
 
@@ -163,6 +163,7 @@ public class Replays {
         return true;
     }
 
+    // пока что реплеев может быть очень много, что-то с этим нужно сделать...
     public static int numberOfReplays() {
         File dir = new File(fileDirectory);
         if (!dir.isDirectory() || !dir.exists()) {

@@ -1,4 +1,5 @@
 public class Main {
+    // параметры игры
     private static int gridHeight = 40;
     private static int gridWidth = 80;
     private static int cellSize = 20;
@@ -10,8 +11,8 @@ public class Main {
 
     public static void main(String[] args) {
         GlDraw glDraw = new GlDraw(gridHeight, gridWidth);
-        AskUser user = new AskUser(gridHeight, gridWidth);
-        ModelSnake changeModel = new ModelSnake(gridWidth, gridHeight, withReplays);
+        ModelUser user = new ModelUser(gridHeight, gridWidth);
+        ModelSnake changeModel = new ModelSnake(gridHeight, gridWidth, withReplays);
         ControllerMouse controlMouse = new ControllerMouse(user, cellSize, gridHeight, gridWidth);
         Controller controller = new Controller(changeModel, delayForController); ///////////////
         Display helloGL = new Display(windowWidth, windowHeight, gridWidth, gridHeight, "Snake", cellSize, withReplays, delayForController, styleGridWithGrid, glDraw, user, controlMouse, changeModel, controller);

@@ -2,24 +2,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glColor3f;
-
-public class AskUser { // Модель пользователя для интерфейса
+public class ModelUser { // Модель пользователя для интерфейса
     // Объект пользователь создается каждый раз после игры
     Button[] allButtonsForType = new Button[4]; // можем менять количество кнопок
     Button[] allButtonsForLevel = new Button[5];
     Button[] allButtonsOfEndGame = new Button[2];
     Button[] allButtonsOfReplays = new Button[Replays.numberOfReplays()];
-    private int gridHeight, gridWidth;
+    int gridHeight, gridWidth;
     int button = 9;
     int level = 9;
     int end = 9;
     int numberOfReplay = 9;
 
-    public AskUser(int gridHeight, int gridWidth) {
+    public ModelUser(int gridHeight, int gridWidth) {
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
         addButtonsVertical(allButtonsForType);
@@ -27,7 +22,7 @@ public class AskUser { // Модель пользователя для инте�
 
     public int argument(int arg, double posX, double posY, int cellSize, Button[] allButtons) {
 
-        if (arg == 0) {
+        if (arg == 0) { // для мышки нужно перевернуть координаты
             button = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
         } else if (arg == 1) {
             level = clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), allButtons) + 1;
@@ -75,7 +70,7 @@ public class AskUser { // Модель пользователя для инте�
         return numberOfReplay > 0 && numberOfReplay <= Replays.numberOfReplays();
     }
 
-    public void whatButtonInStart(@NotNull AskUser user) {
+    public void whatButtonInStart(@NotNull ModelUser user) {
         switch (user.button) {
             case (1):
                 user.level = 0;

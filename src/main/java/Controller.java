@@ -36,7 +36,7 @@ public class Controller {
 
 
         }
-        if (glfwGetKey(window1, GLFW_KEY_ESCAPE) == GLFW_PRESS) stop();
+        if (glfwGetKey(window1, GLFW_KEY_ESCAPE) == GLFW_PRESS) return 10;
         return change.lastWay;
     }
 

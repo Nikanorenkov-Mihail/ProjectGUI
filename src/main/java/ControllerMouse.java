@@ -3,13 +3,13 @@ import static org.lwjgl.glfw.GLFW.*;
 public class ControllerMouse {
     long window1;
 
-    AskUser user;
+    ModelUser user;
     int cellSize;
     int gridHeight;
     int gridWidth;
 
 
-    public ControllerMouse(AskUser user, int cellSize, int gridHeight, int gridWidth) {
+    public ControllerMouse(ModelUser user, int cellSize, int gridHeight, int gridWidth) {
         this.user = user;
         this.cellSize = cellSize;
         this.gridHeight = gridHeight;
