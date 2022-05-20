@@ -1,4 +1,5 @@
 package model.user;
+
 import functions.Replays;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,7 +66,7 @@ public class ModelUser { // Модель пользователя для инт�
                 }
             }
         }
-        return 9;
+        return 8;
     }
 
     public static boolean isRightNumber(int numberOfReplay) {
@@ -89,7 +90,7 @@ public class ModelUser { // Модель пользователя для инт�
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Error cant be here" + user.button);
+                throw new IllegalArgumentException("Error cant be here" + user.button + " " + user.allButtonsForType.length);
         }
     }
 }

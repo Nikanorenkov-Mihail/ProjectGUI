@@ -1,4 +1,5 @@
 package model;
+
 import controller.SnakeModel;
 import controller.SnakesBody;
 import functions.Replays;
@@ -20,11 +21,11 @@ public class ModelMainSnake {
     boolean withReplays;
     String allWays = "";
 
-    public ModelMainSnake( int gridHeight,int gridWidth, boolean withReplays) {
+    public ModelMainSnake(int gridHeight, int gridWidth, boolean withReplays) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         this.withReplays = withReplays;
-      }
+    }
 
     public void gameOrReplay(boolean isReplay, ModelUser user) {
         if (isReplay) {
@@ -107,7 +108,9 @@ public class ModelMainSnake {
     }
 
     public void newWay() {
-        if (lastWay == 10){  throw new IllegalArgumentException("out");}
+        if (lastWay == 10) {
+            throw new IllegalArgumentException("out");
+        }
         if (masOfWalls.length == 0) {
             way(lastWay);
             isBonusHere();

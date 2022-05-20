@@ -1,4 +1,5 @@
 package functions;
+
 import model.AllBonuses;
 import model.Bonus;
 import model.Wall;

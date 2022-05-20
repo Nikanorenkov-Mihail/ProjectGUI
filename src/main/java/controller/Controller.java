@@ -1,4 +1,5 @@
 package controller;
+
 import model.ModelMainSnake;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -9,7 +10,7 @@ public class Controller {
     public boolean pauseControl = false;
     public double delay;
     int counterForDelay = 0;
-    double lastTimeForKeys = 0.0;
+    double lastTime = 0.0;
     int counterForStr = 0;
     String allWays = "";
 
@@ -45,9 +46,9 @@ public class Controller {
 
     public boolean isTimeToChangeWay() {
         double currentTime = glfwGetTime();
-        if (currentTime - lastTimeForKeys > delay) {
+        if (currentTime - lastTime > delay) {
 
-            lastTimeForKeys = currentTime;
+            lastTime = currentTime;
 
 
             changeDelay();
@@ -75,27 +76,30 @@ public class Controller {
         }
     }
 
-    public void controllerForReplays(long window1) {
-        if (pauseControl || glfwGetKey(window1, GLFW_KEY_O) == GLFW_PRESS) pauseStop();
-        if (glfwGetKey(window1, GLFW_KEY_P) == GLFW_PRESS) pause();
-
+    public int controllerForReplays(long window1) {
+        int temp = 9;
         try {
-            double currentTime = glfwGetTime();
-            if (currentTime - lastTimeForKeys > delay) {
 
-                lastTimeForKeys = currentTime;
-
-                if (!pauseControl) {
-                    change.lastWay = (int) allWays.charAt(counterForStr) - 48;
-                    change.newWay();
-                    changeDelay();
-                    counterForStr++;
-                }
-
+            if (!pauseControl) {
+                temp = (int) allWays.charAt(counterForStr) - 48;
+                changeDelay();
+                counterForStr++;
             }
+
         } catch (StringIndexOutOfBoundsException e) { // случается при прерывании игры ESCпом
             throw new IllegalArgumentException("Game over  Your score: " + (change.nowBonus + 1) * 5);
         }
+     /*   //if (pauseControl || glfwGetKey(window1, GLFW_KEY_O) == GLFW_PRESS) pauseStop();
+        //if (glfwGetKey(window1, GLFW_KEY_P) == GLFW_PRESS) pause();
+        if (glfwGetKey(window1, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            return 10;//throw new IllegalArgumentException("Out of replay");
+
+        //if (!pauseControl) {
+            counterForStr++;
+            return (int) allWays.charAt(counterForStr) - 48;
+        //}*/
+
+        return temp;
     }
 
     public void whatWayInReplay(String allWays) {

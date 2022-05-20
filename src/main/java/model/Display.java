@@ -1,4 +1,5 @@
 package model;
+
 import controller.Controller;
 import controller.ControllerMouse;
 import functions.Replays;
@@ -10,6 +11,7 @@ import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
+
 import java.nio.*;
 import java.util.Objects;
 
@@ -94,10 +96,10 @@ public class Display {
         if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
 
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-        });
+        //glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+        //  if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+        //      glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+        //});
 
         // Get the thread stack and push a new frame
         try (MemoryStack stack = stackPush()) {
@@ -217,7 +219,15 @@ public class Display {
         while (!glfwWindowShouldClose(window)) { // Окно реплея
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             glDraw.drawGame(styleGridWithGrid, changeForReplay);
-            controllerForReplays.controllerForReplays(window);
+
+
+            if (!controllerForReplays.pauseControl && controllerForReplays.isTimeToChangeWay()) {
+                changeForReplay.lastWay = controllerForReplays.controllerForReplays(window);
+                changeForReplay.newWay();// говорим змейке двигаться в нужный delay без паузы
+                System.out.println(changeForReplay.lastWay);
+            }
+
+            //controllerForReplays.controllerForReplays(window);
             glfwSwapBuffers(window); // swap the color buffers
             // Poll for window events. The key callback above will only be
             // invoked during this call.
@@ -235,23 +245,8 @@ public class Display {
             glColor3f(1.0f, 0.0f, 0.0f);
 
             glDraw.askUserLevelInButton(masOfButton);
-            controlMouse.checkMouse(arg, masOfButton, window);
-            switch (arg) {
-                case (0):
-                    counter = user.button;
-                    break;
-                case (1):
-                    counter = user.level;
-                    break;
-                case (2):
-                    counter = user.end;
-                    break;
-                case (3):
-                    counter = user.numberOfReplay;
-                    break;
-                default:
-                    break;
-            }
+            counter = controlMouse.checkMouse(masOfButton, window);
+
 
             glfwSwapBuffers(window); // swap the color buffers
 
@@ -259,6 +254,23 @@ public class Display {
             // invoked during this call.
             glfwPollEvents();
         } // само окно выбора уровня игры со стенами
+
+        switch (arg) {
+            case (0):
+                user.button = counter;
+                break;
+            case (1):
+                user.level = counter;
+                break;
+            case (2):
+                user.end = counter;
+                break;
+            case (3):
+                user.numberOfReplay = counter;
+                break;
+            default:
+                break;
+        }
     }
 
     private void windowUserInterfaceHorizontalButton(int arg, Button[] masOfButton, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse) {
@@ -267,32 +279,38 @@ public class Display {
         // !!!!!!!!!! сделать красивый экран окончания
         user.addButtonsHorizontal(masOfButton);
         int counter = 9;
-        while (counter == 9) { // Окно выбора действия после игры (1 - основное меню; 2 - выход из игры)
+
+        while (counter == 9) { // Окно выбора уровня игры
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-            glColor3f(1.0f, 1.0f, 0.0f);
+            glColor3f(1.0f, 0.0f, 0.0f);
 
             glDraw.askUserLevelInButton(masOfButton);
-            controlMouse.checkMouse(arg, masOfButton, window);
+            counter = controlMouse.checkMouse(masOfButton, window);
 
-            switch (arg) {
-                case (0):
-                    counter = user.button;
-                    break;
-                case (1):
-                    counter = user.level;
-                    break;
-                case (2):
-                    counter = user.end;
-                    break;
-                case (3):
-                    counter = user.numberOfReplay;
-                    break;
-                default:
-                    break;
-            }
+
             glfwSwapBuffers(window); // swap the color buffers
 
+            // Poll for window events. The key callback above will only be
+            // invoked during this call.
             glfwPollEvents();
+        } // само окно выбора уровня игры со стенами
+
+        switch (arg) {
+            case (0):
+                user.button = counter;
+                break;
+            case (1):
+                user.level = counter;
+                break;
+            case (2):
+                user.end = counter;
+                break;
+            case (3):
+                user.numberOfReplay = counter;
+                break;
+            default:
+                break;
         }
     }
 

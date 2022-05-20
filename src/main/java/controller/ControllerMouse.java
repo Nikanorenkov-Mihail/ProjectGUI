@@ -1,6 +1,8 @@
 package controller;
+
 import model.user.Button;
 import model.user.ModelUser;
+import org.jetbrains.annotations.NotNull;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -11,6 +13,7 @@ public class ControllerMouse {
     int cellSize;
     int gridHeight;
     int gridWidth;
+    boolean isButtonRelease = true;
 
 
     public ControllerMouse(ModelUser user, int cellSize, int gridHeight, int gridWidth) {
@@ -20,16 +23,36 @@ public class ControllerMouse {
         this.gridWidth = gridWidth;
     }
 
-    public void checkMouse(int arg, Button[] masOfButtons, long wind) { // сделать ретюрн
+    public int clickOnButton(double clickX, double clickY, Button @NotNull [] allButtons) {
+        for (int i = 0; i < allButtons.length; i++) {
+            if (clickX >= allButtons[i].x1 && clickX <= allButtons[i].x2) {
+                if (clickY >= allButtons[i].y4 && clickY <= allButtons[i].y2) {
+                    return i;
+                }
+            }
+        }
+        return 8;
+    }
+
+    public int checkMouse(Button[] masOfButtons, long wind) { // сделать ретюрн
         this.window1 = wind;
-        /*double[] masX = {0.0}, masY = {0.0};
+        double[] masX = {0.0}, masY = {0.0};
         glfwGetCursorPos(window1, masX, masY);
-        if (glfwGetMouseButton(window1, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            user.argument(arg, masX[0], masY[0], cellSize, masOfButtons);
-        }*/
+        if (glfwGetMouseButton(window1, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !isButtonRelease) {
+            isButtonRelease = true;
+            System.out.println(masX[0] + " " + masY[0]);
+            return clickOnButton(masX[0] / cellSize, gridHeight - (masY[0] / cellSize), masOfButtons) + 1;
+
+            //user.argument(arg, masX[0], masY[0], cellSize, masOfButtons);
+            //return clickOnButton(masX[0] / cellSize, gridHeight - (masY[0] / cellSize), masOfButtons) + 1;
+        }
+        if (glfwGetMouseButton(window1, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
+            isButtonRelease = false;
+        }
+
         // правильно не работает
 
-        glfwSetCursorPosCallback(window1, (window1, posX, posY) -> {
+       /* glfwSetCursorPosCallback(window1, (window1, posX, posY) -> {
             glfwSetMouseButtonCallback(window1, (window, button, action, mods) -> {
                 user.argument(arg, posX, posY, cellSize, masOfButtons);
                /*if (button == GLFW_MOUSE_BUTTON_LEFT) {
@@ -41,11 +64,12 @@ public class ControllerMouse {
                     } else if (us == 2) {
                         user.end = user.clickOnButton(posX / cellSize, gridHeight - (posY / cellSize), user.allButtonsOfEndGame) + 1;
                     }
-                }*/
+                }
 
             });
-        });
+        });*/
 
+        return 9;
 
     }
 
