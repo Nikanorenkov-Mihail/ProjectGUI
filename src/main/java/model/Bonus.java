@@ -1,4 +1,5 @@
 package model;
+
 import java.util.Random;
 
 public class Bonus {
@@ -9,14 +10,6 @@ public class Bonus {
     public Bonus(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-
-    public int bonusX() {
-        return this.x;
-    }
-
-    public int bonusY() {
-        return this.y;
     }
 
     public Bonus newRandomBonus(int gridHeight, int gridWidth) {

@@ -7,8 +7,6 @@ import model.user.ModelUser;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.util.Arrays;
-
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
@@ -59,7 +57,6 @@ public class Replays {
             }
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(nameForReplayFile))) {
                 writer.append(result);
-                // add bonuses
             } catch (IOException e) {
                 throw new IllegalArgumentException("FileWrite");
             }
@@ -154,19 +151,6 @@ public class Replays {
             if (test) test = false;
             else return false;
         }
-
-/*
-        int counter = 1;
-        for (File f : listFiles) { // работает до 10 реплеев
-            if (f.getName().equals(name + counter + ".txt")) { // файлы строго по порядку
-                System.out.println(f.getName());
-                System.out.println(name + counter + ".txt");
-                System.out.println((f.getName().equals(name + counter + ".txt")));
-                // написать бы еще сортировку...
-                counter++;
-            } else return false;
-
-        }*/
         return true;
     }
 
@@ -179,6 +163,5 @@ public class Replays {
 
         File[] listFiles = dir.listFiles();
         return listFiles.length;
-
     }
 }

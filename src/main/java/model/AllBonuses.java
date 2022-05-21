@@ -1,4 +1,5 @@
 package model;
+
 public class AllBonuses {
     public Bonus[] bonusesExist = new Bonus[200];// можем менять количество бонусов
 

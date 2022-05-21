@@ -6,6 +6,7 @@ import model.ModelMainSnake;
 import model.user.ModelUser;
 
 public class Main {
+
     // параметры игры
     private static int gridHeight = 40;
     private static int gridWidth = 80;

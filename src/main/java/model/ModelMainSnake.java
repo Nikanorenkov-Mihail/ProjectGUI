@@ -16,7 +16,6 @@ public class ModelMainSnake {
     public int nowBonus = 0;
     public int lastWay = 0;
     int lastWayNotMe = 0; //last command
-
     boolean wayIntoMe = false;
     boolean withReplays;
     String allWays = "";

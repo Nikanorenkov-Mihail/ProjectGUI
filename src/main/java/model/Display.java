@@ -227,7 +227,6 @@ public class Display {
                 System.out.println(changeForReplay.lastWay);
             }
 
-            //controllerForReplays.controllerForReplays(window);
             glfwSwapBuffers(window); // swap the color buffers
             // Poll for window events. The key callback above will only be
             // invoked during this call.
@@ -287,7 +286,6 @@ public class Display {
 
             glDraw.askUserLevelInButton(masOfButton);
             counter = controlMouse.checkMouse(masOfButton, window);
-
 
             glfwSwapBuffers(window); // swap the color buffers
 

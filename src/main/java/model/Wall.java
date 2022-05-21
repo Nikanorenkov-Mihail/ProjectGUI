@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
 public class Wall {
+
     public int x1;
     public int y1;
     public int x2;

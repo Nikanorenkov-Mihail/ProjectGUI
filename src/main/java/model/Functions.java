@@ -1,10 +1,6 @@
 package model;
 import controller.SnakesBody;
-import model.Bonus;
-import model.Wall;
 import org.jetbrains.annotations.NotNull;
-
-import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Functions {
 

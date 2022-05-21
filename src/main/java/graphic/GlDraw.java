@@ -1,4 +1,5 @@
 package graphic;
+
 import model.Bonus;
 import model.Wall;
 import model.ModelMainSnake;

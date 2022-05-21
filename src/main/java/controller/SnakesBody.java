@@ -1,11 +1,10 @@
 package controller;
+
 import org.jetbrains.annotations.NotNull;
 
-public class SnakesBody { // это не используем
+public class SnakesBody {
     public int x;
     public int y;
-    // можно еще разные цвета добавить
-
 
     public SnakesBody(int x, int y) {
         this.x = x;
