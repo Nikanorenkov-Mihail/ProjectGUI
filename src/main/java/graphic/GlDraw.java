@@ -117,6 +117,19 @@ public class GlDraw {
         glEnd();
     }
 
+    public void askUserLevelInButton11(Button @NotNull [] user, int size) {
+        glColor3f(1.0f, 0.0f, 0.0f);
+        for (int i = 0; i < size; i++) {
+            glBegin(GL_LINE_LOOP); // отрисовка кнопок
+
+            glVertex2f(convertX(user[i].x1), convertY(user[i].y1));
+            glVertex2f(convertX(user[i].x2), convertY(user[i].y2));
+            glVertex2f(convertX(user[i].x3), convertY(user[i].y3));
+            glVertex2f(convertX(user[i].x4), convertY(user[i].y4));
+            glEnd();
+        }
+    }
+
     public void askUserLevelInButton(Button @NotNull [] user) {
         glColor3f(1.0f, 0.0f, 0.0f);
         for (int i = 0; i < user.length; i++) {
