@@ -17,20 +17,10 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL46.*;
 
 public class Texture {
-    private final int BYTES_PER_PIXEL = 50;
+    private static final int BYTES_PER_PIXEL = 4;
+    public static int[] masImages = new int[sizeOfImageDirectory()];
 
-    public int[] masImages = new int[sizeOfImageDirectory()];
-
-    public Texture() {
-        for (int i = 1; i <= Texture.sizeOfImageDirectory(); i++) {
-            BufferedImage im = setTexture(i);
-            System.out.println(im.toString());
-           masImages[i] = loadTexture(im);
-            //masImages[i] = loadTexture(Texture.loadImage("InputPNG/1.jpg"));
-        }
-    }
-
-    public int loadTexture(@NotNull BufferedImage im) {
+    public static int loadTexture(@NotNull BufferedImage im) {
         int[] pixels = new int[im.getWidth() * im.getHeight()];
         pixels = im.getRGB(0, 0, im.getWidth(), im.getHeight(), pixels, 0, im.getWidth());
 
@@ -62,9 +52,9 @@ public class Texture {
     }
 
 
-    public @Nullable BufferedImage loadImage(String loc) {
+    public static @Nullable BufferedImage loadImage(String loc) {
         try {
-            System.out.println(loc);
+
             return ImageIO.read(new File(loc));
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,8 +63,7 @@ public class Texture {
     }
 
 
-
-    public BufferedImage setTexture(int index) {
+    private static BufferedImage setTexture(int index) {
         switch (index) {
             case 1:
                 return loadImage("InputPNG/1.jpg");
@@ -100,6 +89,15 @@ public class Texture {
                 return loadImage("InputPNG/11.jpg");
         }
         return loadImage("InputPNG/11.jpg");
+    }
+
+    public static void imageIn1() {
+        for (int i = 1; i <= Texture.sizeOfImageDirectory(); i++) {
+            BufferedImage im = setTexture(i);
+            int id = Texture.loadTexture(im);
+            masImages[i-1] = id;
+            //System.out.println(id);
+        }
     }
 
     public static int sizeOfImageDirectory() {

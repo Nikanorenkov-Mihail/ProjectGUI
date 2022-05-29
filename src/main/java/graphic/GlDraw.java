@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 
+import static graphic.Texture.sizeOfImageDirectory;
 import static java.lang.Math.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -19,11 +20,13 @@ public class GlDraw {
     private int takt = 1;
     private double lastTime = 0.0;
     private int image = 0;
-   private final Texture texture = new Texture();
+
     public GlDraw(int gridHeight, int gridWidth) {
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
+
     }
+
 
     private float convertX(int x) {
         return -1.0f + 1.0f / (float) gridWidth * x * 2;
@@ -121,7 +124,7 @@ public class GlDraw {
     }
 
     public void askUserLevelInButton11(ModelUser user, int size, int indexImage) {
-        //glColor3f(1.0f, 0.0f, 0.0f);
+        glColor3f(1.0f, 0.0f, 0.0f);
 
         for (int i = 0; i < size; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
@@ -158,7 +161,7 @@ public class GlDraw {
     }
 
 
-    /*private BufferedImage setTexture(int index) {
+    private BufferedImage setTexture(int index) {
         switch (index) {
             case 1:
                 return Texture.loadImage("InputPNG/1.jpg");
@@ -184,6 +187,14 @@ public class GlDraw {
                 return Texture.loadImage("InputPNG/11.jpg");
         }
         return Texture.loadImage("InputPNG/11.jpg");
+    }
+
+    /*public void imageIn() {
+        for (int i = 1; i <= Texture.sizeOfImageDirectory(); i++) {
+            BufferedImage im = setTexture(i);
+            int id = Texture.loadTexture(im);
+
+        }
     }*/
 
     private void drawSMTH(ModelUser user, int indexSmth) {
@@ -236,9 +247,10 @@ public class GlDraw {
     }
 
     private void drawImage(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int index) {
-        BufferedImage im = texture.setTexture(index);
-        int id = texture.loadTexture(im);
-
+        BufferedImage im = setTexture(index);
+        int id = Texture.loadTexture(im);
+         //id = Texture.masImages[(index-1)];
+        System.out.println(index);
         //BufferedImage im = setTexture(index);
         //int id = texture.masImages[index];
         glBindTexture(GL_TEXTURE_2D, id);
