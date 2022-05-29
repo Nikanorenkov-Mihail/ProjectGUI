@@ -4,7 +4,10 @@ import model.Bonus;
 import model.Wall;
 import model.ModelMainSnake;
 import model.user.Button;
+import model.user.ModelUser;
 import org.jetbrains.annotations.NotNull;
+
+import java.awt.image.BufferedImage;
 
 import static java.lang.Math.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -16,7 +19,7 @@ public class GlDraw {
     private int takt = 1;
     private double lastTime = 0.0;
     private int image = 0;
-
+   private final Texture texture = new Texture();
     public GlDraw(int gridHeight, int gridWidth) {
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
@@ -117,21 +120,24 @@ public class GlDraw {
         glEnd();
     }
 
-    public void askUserLevelInButton11(Button @NotNull [] user, int size) {
-        glColor3f(1.0f, 0.0f, 0.0f);
+    public void askUserLevelInButton11(ModelUser user, int size, int indexImage) {
+        //glColor3f(1.0f, 0.0f, 0.0f);
+
         for (int i = 0; i < size; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
 
-            glVertex2f(convertX(user[i].x1), convertY(user[i].y1));
-            glVertex2f(convertX(user[i].x2), convertY(user[i].y2));
-            glVertex2f(convertX(user[i].x3), convertY(user[i].y3));
-            glVertex2f(convertX(user[i].x4), convertY(user[i].y4));
+            glVertex2f(convertX(user.numMasButton[i].x1), convertY(user.numMasButton[i].y1));
+            glVertex2f(convertX(user.numMasButton[i].x2), convertY(user.numMasButton[i].y2));
+            glVertex2f(convertX(user.numMasButton[i].x3), convertY(user.numMasButton[i].y3));
+            glVertex2f(convertX(user.numMasButton[i].x4), convertY(user.numMasButton[i].y4));
             glEnd();
+            drawSMTH(user, indexImage);
         }
+        //glColor3f(0.0f, 0.0f, 0.0f);
     }
 
     public void askUserLevelInButton(Button @NotNull [] user) {
-        glColor3f(1.0f, 0.0f, 0.0f);
+        //glColor3f(1.0f, 0.0f, 0.0f);
         for (int i = 0; i < user.length; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
 
@@ -149,6 +155,109 @@ public class GlDraw {
         drawBonus(changeForReplay.masOfBonuses[changeForReplay.nowBonus]); // как только бонус съедят, достанем другой из массива
 
         drawSnake(changeForReplay);
+    }
+
+
+    /*private BufferedImage setTexture(int index) {
+        switch (index) {
+            case 1:
+                return Texture.loadImage("InputPNG/1.jpg");
+            case 2:
+                return Texture.loadImage("InputPNG/2.jpg");
+            case 3:
+                return Texture.loadImage("InputPNG/3.jpg");
+            case 4:
+                return Texture.loadImage("InputPNG/4.jpg");
+            case 5:
+                return Texture.loadImage("InputPNG/5.jpg");
+            case 6:
+                return Texture.loadImage("InputPNG/6.jpg");
+            case 7:
+                return Texture.loadImage("InputPNG/7.jpg");
+            case 8:
+                return Texture.loadImage("InputPNG/8.jpg");
+            case 9:
+                return Texture.loadImage("InputPNG/9.jpg");
+            case 10:
+                return Texture.loadImage("InputPNG/10.jpg");
+            case 11:
+                return Texture.loadImage("InputPNG/11.jpg");
+        }
+        return Texture.loadImage("InputPNG/11.jpg");
+    }*/
+
+    private void drawSMTH(ModelUser user, int indexSmth) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        switch (indexSmth) {
+            case (1): // рисуем кнопки старта (их 4)
+                for (int i = 0; i < user.numButtons; i++) {
+                    drawImage(user.numMasButton[i].x1,
+                            user.numMasButton[i].y1,
+                            user.numMasButton[i].x2,
+                            user.numMasButton[i].y2,
+                            user.numMasButton[i].x3,
+                            user.numMasButton[i].y3,
+                            user.numMasButton[i].x4,
+                            user.numMasButton[i].y4,
+                            i + 1);
+                }
+                break;
+            case (2):// рисуем кнопки уровня (их 5)
+                for (int i = 0; i < user.numButtons; i++) {
+                    drawImage(user.numMasButton[i].x1,
+                            user.numMasButton[i].y1,
+                            user.numMasButton[i].x2,
+                            user.numMasButton[i].y2,
+                            user.numMasButton[i].x3,
+                            user.numMasButton[i].y3,
+                            user.numMasButton[i].x4,
+                            user.numMasButton[i].y4,
+                            i + 1 + 4); // добавим кнопки старта
+                }
+                break;
+            case (3):// рисуем кнопки окончания (их 2)
+                for (int i = 0; i < user.numButtons; i++) {
+                    drawImage(user.numMasButton[i].x1,
+                            user.numMasButton[i].y1,
+                            user.numMasButton[i].x2,
+                            user.numMasButton[i].y2,
+                            user.numMasButton[i].x3,
+                            user.numMasButton[i].y3,
+                            user.numMasButton[i].x4,
+                            user.numMasButton[i].y4,
+                            i + 1 + 4 + 5); // добавим кнопки старта и уровня
+                }
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
+    private void drawImage(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int index) {
+        BufferedImage im = texture.setTexture(index);
+        int id = texture.loadTexture(im);
+
+        //BufferedImage im = setTexture(index);
+        //int id = texture.masImages[index];
+        glBindTexture(GL_TEXTURE_2D, id);
+        glBegin(GL_QUADS);
+
+        glTexCoord2f(0, 0);
+        glVertex2d(convertX(x1), convertY(y1));
+
+        glTexCoord2f(1, 0);
+        glVertex2d(convertX(x2), convertY(y2));
+
+        glTexCoord2f(1, 1);
+        glVertex2d(convertX(x3), convertY(y3));
+
+        glTexCoord2f(0, 1);
+        glVertex2d(convertX(x4), convertY(y4));
+
+        glEnd();
+        glDeleteTextures(id);
     }
 
 

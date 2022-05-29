@@ -4,6 +4,7 @@ import controller.Controller;
 import controller.ControllerMouse;
 import functions.Replays;
 import graphic.GlDraw;
+import graphic.Texture;
 import model.user.Button;
 import model.user.ModelUser;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,7 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import java.awt.image.BufferedImage;
 import java.nio.*;
 import java.util.Objects;
 
@@ -128,12 +130,19 @@ public class Display {
     }
 
     private void loop() {
+        // Texture new1 = new Texture("InputPNG/1.png", 0, width, height);
+        // System.out.println(new1);
+
 
         while (!glfwWindowShouldClose(window)) {
+
             GL.createCapabilities();
-
-            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
+            glEnable(GL_TEXTURE_2D);
+            glEnable(GL_BLEND);
+            //glColor3f(0.0f,0.0f,0.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            //glColor3f(0.0f, 0.0f, 0.0f);
 
             // Спрашиваем, что хочет пользователь
             // 1 - игра без стен
@@ -148,14 +157,13 @@ public class Display {
             // P - pause
             // O - go after pause
 
-            windowUserInterfaceVerticalButton(0, glDraw, user, controlMouse, 4);
+            windowUserInterfaceVerticalButton(0, glDraw, user, controlMouse, 4, false);
 
             if (user.button == 3) {
                 if (Replays.numberOfReplays() == 0) {
                     System.out.println("Directory with replays is empty");
 
                 } else {
-                    //user.addButtonsHorizontal(user.allButtonsOfReplays);
                     windowUserInterfaceHorizontalButton(3, glDraw, user, controlMouse, Replays.numberOfReplays());
 
                     changeModel.gameOrReplay(true, user); // модель для реплея и игры общая, функция лишь меняет некоторые параметры
@@ -169,10 +177,8 @@ public class Display {
                 }
             } else {
                 if (user.button == 2) {
-                    //user.addButtonsVertical(user.allButtonsForLevel);
-                    windowUserInterfaceVerticalButton(1, glDraw, user, controlMouse,5);
+                    windowUserInterfaceVerticalButton(1, glDraw, user, controlMouse, 5, true);
                 } else {
-
                     user.whatButtonInStart(user);
                 }
                 changeModel.gameOrReplay(false, user);
@@ -185,7 +191,7 @@ public class Display {
             }
             windowUserInterfaceHorizontalButton(2, glDraw, user, controlMouse, 2);
 
-            if (user.end == user.allButtonsOfEndGame.length)
+            if (user.end == user.numButtons)
                 glfwSetWindowShouldClose(window, true);
             else if (user.end == 1) {
                 toStartValue(); // новая игра, возвращаем все модели к первоначальному состоянию
@@ -193,6 +199,25 @@ public class Display {
         }
     }
     // на каждое действие после выбора пользователя новое окно(сцена)
+
+
+  /*  private void drawGrid(GameGrid grid) {
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                if(grid.getTile(x, y) == 0) continue;
+                drawImage(y, x, grid.getTile(x, y));
+            }
+        }
+    }
+
+    private double convertX(double cord) {
+        return -1 + (cord * tileSize) / (windowSize / 2.0);
+    }
+
+    private double convertY(double cord) {
+        return 1 - (tileSize * cord) / (windowSize / 2.0);
+    }*/
+
 
     private void windowWithGame(ModelMainSnake change, GlDraw glDraw, Controller controller) {
         Replays replay = new Replays(gridHeight, gridWidth);
@@ -220,7 +245,6 @@ public class Display {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             glDraw.drawGame(styleGridWithGrid, changeForReplay);
 
-
             if (!controllerForReplays.pauseControl && controllerForReplays.isTimeToChangeWay()) {
                 changeForReplay.lastWay = controllerForReplays.controllerForReplays(window);
                 changeForReplay.newWay();// говорим змейке двигаться в нужный delay без паузы
@@ -234,19 +258,21 @@ public class Display {
         }
     }
 
-    private void windowUserInterfaceVerticalButton(int arg, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse, int numOfButtons) {
+    private void windowUserInterfaceVerticalButton(int arg, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse, int numOfButtons, boolean isForLevel) {
 
         user.addButtonsVertical1(numOfButtons);
         int counter = 9;
 
         while (counter == 9) { // Окно выбора уровня игры
 
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-            glColor3f(1.0f, 0.0f, 0.0f);
-            counter = controlMouse.checkMouse(user.numMasButton, window);
-            glDraw.askUserLevelInButton11(user.numMasButton, user.numButtons);
 
+            //glColor3f(1.0f, 0.0f, 0.0f);
 
+            counter = controlMouse.checkMouse(user, window);
+            //   if (counter >= user.numButtons) counter = 9;
+            glDraw.askUserLevelInButton11(user, user.numButtons, (isForLevel) ? 2 : 1);
 
             glfwSwapBuffers(window); // swap the color buffers
 
@@ -274,8 +300,6 @@ public class Display {
     }
 
     private void windowUserInterfaceHorizontalButton(int arg, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse, int numOfButtons) {
-
-
         // !!!!!!!!!! сделать красивый экран окончания
         user.addButtonsHorizontal1(numOfButtons);
         int counter = 9;
@@ -283,11 +307,11 @@ public class Display {
         while (counter == 9) { // Окно выбора уровня игры
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-            glColor3f(1.0f, 0.0f, 0.0f);
+            // glColor3f(1.0f, 0.0f, 0.0f);
 
-            glDraw.askUserLevelInButton11(user.numMasButton, user.numButtons);
-            counter = controlMouse.checkMouse(user.numMasButton, window);
-
+            glDraw.askUserLevelInButton11(user, user.numButtons, 3);
+            counter = controlMouse.checkMouse(user, window);
+            // if (counter > user.numButtons) counter = 9;
             glfwSwapBuffers(window); // swap the color buffers
 
             // Poll for window events. The key callback above will only be
@@ -320,6 +344,8 @@ public class Display {
         controlMouse = new ControllerMouse(user, cellSize, gridHeight, gridWidth);
         controller = new Controller(changeModel, delayForController);
 
+
+        glEnd();
         System.out.println(changeModel.gridHeight + " " + changeModel.gridWidth);
     }
 }
