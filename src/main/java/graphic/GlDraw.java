@@ -124,7 +124,7 @@ public class GlDraw {
     }
 
     public void askUserLevelInButton11(ModelUser user, int size, int indexImage) {
-        glColor3f(1.0f, 0.0f, 0.0f);
+        glColor3f(.0f, 1.0f, 0.0f);
 
         for (int i = 0; i < size; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
