@@ -20,13 +20,9 @@ public class Texture {
     private static final int BYTES_PER_PIXEL = 4;
     public static int[] masImages = new int[sizeOfImageDirectory()];
 
-    /**
-     * Идентификатор текстуры
-     */
+
     private final int texture;
-    /**
-     * Слот ячейки текстуры
-     */
+
     private final int index;
 
     /**
