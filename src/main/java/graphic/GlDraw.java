@@ -6,6 +6,7 @@ import model.ModelMainSnake;
 import model.user.Button;
 import model.user.ModelUser;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL12;
 
 import java.awt.image.BufferedImage;
 
@@ -134,7 +135,9 @@ public class GlDraw {
             glVertex2f(convertX(user.numMasButton[i].x3), convertY(user.numMasButton[i].y3));
             glVertex2f(convertX(user.numMasButton[i].x4), convertY(user.numMasButton[i].y4));
             glEnd();
-            drawSMTH(user, indexImage);
+            
+            //если выключить работать будет приятнее
+            if (indexImage != 9) drawSMTH(user, indexImage);
         }
         //glColor3f(0.0f, 0.0f, 0.0f);
     }
@@ -152,39 +155,39 @@ public class GlDraw {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         switch (indexSmth) {
             case (1): // рисуем кнопки старта (их 4)
-                    drawImage(user.numMasButton[0].x1,
-                            user.numMasButton[0].y1,
-                            user.numMasButton[0].x2,
-                            user.numMasButton[0].y2,
-                            user.numMasButton[user.numButtons-1].x3,
-                            user.numMasButton[user.numButtons-1].y3,
-                            user.numMasButton[user.numButtons-1].x4,
-                            user.numMasButton[user.numButtons-1].y4,
-                            indexSmth);
+                drawImage(user.numMasButton[0].x1,
+                        user.numMasButton[0].y1,
+                        user.numMasButton[0].x2,
+                        user.numMasButton[0].y2,
+                        user.numMasButton[user.numButtons - 1].x3,
+                        user.numMasButton[user.numButtons - 1].y3,
+                        user.numMasButton[user.numButtons - 1].x4,
+                        user.numMasButton[user.numButtons - 1].y4,
+                        indexSmth);
                 break;
             case (2):// рисуем кнопки уровня (их 5)
-                    drawImage(user.numMasButton[0].x1,
-                            user.numMasButton[0].y1,
-                            user.numMasButton[0].x2,
-                            user.numMasButton[0].y2,
-                            user.numMasButton[user.numButtons-1].x3,
-                            user.numMasButton[user.numButtons-1].y3,
-                            user.numMasButton[user.numButtons-1].x4,
-                            user.numMasButton[user.numButtons-1].y4,
-                            1 + 4); // добавим кнопки старта
+                drawImage(user.numMasButton[0].x1,
+                        user.numMasButton[0].y1,
+                        user.numMasButton[0].x2,
+                        user.numMasButton[0].y2,
+                        user.numMasButton[user.numButtons - 1].x3,
+                        user.numMasButton[user.numButtons - 1].y3,
+                        user.numMasButton[user.numButtons - 1].x4,
+                        user.numMasButton[user.numButtons - 1].y4,
+                        1 + 4); // добавим кнопки старта
 
                 break;
             case (3):// рисуем кнопки окончания (их 2)
                 // отличаются тем, что горизонтальные
-                    drawImage(user.numMasButton[0].x1,
-                            user.numMasButton[0].y1,
-                            user.numMasButton[user.numButtons-1].x2,
-                            user.numMasButton[user.numButtons-1].y2,
-                            user.numMasButton[user.numButtons-1].x3,
-                            user.numMasButton[user.numButtons-1].y3,
-                            user.numMasButton[0].x4,
-                            user.numMasButton[0].y4,
-                            1 + 4 + 5); // добавим кнопки старта и уровня
+                drawImage(user.numMasButton[0].x1,
+                        user.numMasButton[0].y1,
+                        user.numMasButton[user.numButtons - 1].x2,
+                        user.numMasButton[user.numButtons - 1].y2,
+                        user.numMasButton[user.numButtons - 1].x3,
+                        user.numMasButton[user.numButtons - 1].y3,
+                        user.numMasButton[0].x4,
+                        user.numMasButton[0].y4,
+                        1 + 4 + 5); // добавим кнопки старта и уровня
 
                 break;
             default:
@@ -241,6 +244,7 @@ public class GlDraw {
     private void drawImage(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int index) {
 
         int id = Texture.loadTexture(index);
+
         // int id = Texture.masImages[(index-1)];
         System.out.println(index);
         //BufferedImage im = setTexture(index);

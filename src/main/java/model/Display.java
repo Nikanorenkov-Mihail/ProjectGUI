@@ -127,7 +127,7 @@ public class Display {
 
         glfwMakeContextCurrent(window);
 
-        glfwSwapInterval(1);
+        //glfwSwapInterval(1);
         // Make the window visible
         glfwShowWindow(window);
     }
@@ -320,6 +320,7 @@ public class Display {
 
     private void windowUserInterfaceHorizontalButton(int arg, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse, int numOfButtons, boolean isReplay) {
         // !!!!!!!!!! сделать красивый экран окончания
+
         user.addButtonsHorizontal1(numOfButtons);
         int counter = 9;
 
