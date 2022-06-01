@@ -63,12 +63,16 @@ public class Replays {
         }
     }
 
-    public void watchReplayForStr(int numberOfReplay) {
+    public void watchReplayForStr(int numberOfReplay, boolean isItTest) {
         if (!ModelUser.isRightNumber(numberOfReplay)) throw new IllegalArgumentException("Wrong number of replay");
+        if(isItTest){
+            if (!ModelUser.isRightNumberTest(numberOfReplay)) throw new IllegalArgumentException("Wrong number of replay");
+
+        }
         try {
             int counter = 0;
 
-            BufferedReader br = new BufferedReader(new FileReader(fileDirectory + "/" + name + numberOfReplay + ".txt"));
+            BufferedReader br = new BufferedReader(new FileReader((isItTest) ? "TestFiles/" + numberOfReplay + ".txt" : fileDirectory + "/" + name + numberOfReplay + ".txt"));
             String line = br.readLine();
             if (line.split(" ")[0].equals("t")) {
                 int size = Integer.parseInt(line.split(" ")[1]);
@@ -164,4 +168,16 @@ public class Replays {
         File[] listFiles = dir.listFiles();
         return listFiles.length;
     }
+
+    public static int numberOfReplaysTest() {
+        File dir = new File("TestFiles");
+        if (!dir.isDirectory() || !dir.exists()) {
+            return 0;
+        }
+
+        File[] listFiles = dir.listFiles();
+        return listFiles.length;
+    }
+
+
 }

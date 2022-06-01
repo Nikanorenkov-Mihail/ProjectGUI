@@ -41,6 +41,7 @@ public class Display {
     private ControllerMouse controlMouse;
     private ModelMainSnake changeModel;
     private Controller controller;
+    private boolean isItTest;
 
     public Display(int width, int height,
                    int gridWidth,
@@ -54,7 +55,8 @@ public class Display {
                    ModelUser user,
                    ControllerMouse controlMouse,
                    ModelMainSnake changeModel,
-                   Controller controller) {
+                   Controller controller,
+                   boolean isItTest) {
         this.height = height;
         this.width = width;
         this.name = name;
@@ -69,6 +71,7 @@ public class Display {
         this.controlMouse = controlMouse;
         this.changeModel = changeModel;
         this.controller = controller;
+        this.isItTest = isItTest;
     }
 
     public void run() {
@@ -143,50 +146,66 @@ public class Display {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             //glColor3f(0.0f, 0.0f, 0.0f);
-            Texture.imageIn1();
-            // Спрашиваем, что хочет пользователь
-            // 1 - игра без стен
-            // 2 - игра со стенами, после выбрать уровень сложности
-            // 3 - просмотр реплея, номер реплея задается кнопкой на экране, как и все...
-            // 4 - рандомный уровень игры
 
-            // Правила игры
-            // ешь как можно больше бонусов
-            // не стоит врезаться в себя/стены
-            // Движение поддерживают кнопки-стрелки и WSAD
-            // P - pause
-            // O - go after pause
 
-            windowUserInterfaceVerticalButton(0, glDraw, user, controlMouse, 4, false);
+            // Texture.imageIn1();
 
-            if (user.button == 3) {
-                if (Replays.numberOfReplays() == 0) {
-                    System.out.println("Directory with replays is empty");
+            // Tests
+            if (isItTest) {
+                windowUserInterfaceHorizontalButton(3, glDraw, user, controlMouse, Replays.numberOfReplaysTest(), true);
 
+                changeModel.gameOrReplay(true, user, true); // модель для реплея и игры общая, функция лишь меняет некоторые параметры
+                try {
+                    windowWithReplay(changeModel, glDraw, controller);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Something Wrong");
+                }
+            } else {
+
+                // Спрашиваем, что хочет пользователь
+                // 1 - игра без стен
+                // 2 - игра со стенами, после выбрать уровень сложности
+                // 3 - просмотр реплея, номер реплея задается кнопкой на экране, как и все...
+                // 4 - рандомный уровень игры
+
+                // Правила игры
+                // ешь как можно больше бонусов
+                // не стоит врезаться в себя/стены
+                // Движение поддерживают кнопки-стрелки и WSAD
+                // P - pause
+                // O - go after pause
+
+                windowUserInterfaceVerticalButton(0, glDraw, user, controlMouse, 4, false);
+
+                if (user.button == 3) {
+                    if (Replays.numberOfReplays() == 0) {
+                        System.out.println("Directory with replays is empty");
+
+                    } else {
+                        windowUserInterfaceHorizontalButton(3, glDraw, user, controlMouse, Replays.numberOfReplays(), true);
+
+                        changeModel.gameOrReplay(true, user, false); // модель для реплея и игры общая, функция лишь меняет некоторые параметры
+
+                        try {
+                            windowWithReplay(changeModel, glDraw, controller);
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Game over Your score: " + ((changeModel.nowBonus == 0) ? 1 : changeModel.nowBonus * 5));
+                        }
+                        // !!!!!!!!!! сделать красивый экран окончания
+                    }
                 } else {
-                    windowUserInterfaceHorizontalButton(3, glDraw, user, controlMouse, Replays.numberOfReplays(), true);
-
-                    changeModel.gameOrReplay(true, user); // модель для реплея и игры общая, функция лишь меняет некоторые параметры
+                    if (user.button == 2) {
+                        windowUserInterfaceVerticalButton(1, glDraw, user, controlMouse, 5, true);
+                    } else {
+                        user.whatButtonInStart(user);
+                    }
+                    changeModel.gameOrReplay(false, user, false);
 
                     try {
-                        windowWithReplay(changeModel, glDraw, controller);
+                        windowWithGame(changeModel, glDraw, controller);
                     } catch (IllegalArgumentException e) {
                         System.out.println("Game over Your score: " + ((changeModel.nowBonus == 0) ? 1 : changeModel.nowBonus * 5));
                     }
-                    // !!!!!!!!!! сделать красивый экран окончания
-                }
-            } else {
-                if (user.button == 2) {
-                    windowUserInterfaceVerticalButton(1, glDraw, user, controlMouse, 5, true);
-                } else {
-                    user.whatButtonInStart(user);
-                }
-                changeModel.gameOrReplay(false, user);
-
-                try {
-                    windowWithGame(changeModel, glDraw, controller);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Game over Your score: " + ((changeModel.nowBonus == 0) ? 1 : changeModel.nowBonus * 5));
                 }
             }
             windowUserInterfaceHorizontalButton(2, glDraw, user, controlMouse, 2, false);
@@ -248,7 +267,7 @@ public class Display {
             if (!controllerForReplays.pauseControl && controllerForReplays.isTimeToChangeWay()) {
                 changeForReplay.lastWay = controllerForReplays.controllerForReplays(window);
                 changeForReplay.newWay();// говорим змейке двигаться в нужный delay без паузы
-               // System.out.println(changeForReplay.lastWay);
+                // System.out.println(changeForReplay.lastWay);
             }
 
             glfwSwapBuffers(window); // swap the color buffers
@@ -307,9 +326,9 @@ public class Display {
         while (counter == 9) { // Окно выбора уровня игры
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-             //glColor3f(1.0f, 0.0f, 0.0f);
+            //glColor3f(1.0f, 0.0f, 0.0f);
 
-            glDraw.askUserLevelInButton11(user, user.numButtons, (isReplay)?9:3);
+            glDraw.askUserLevelInButton11(user, user.numButtons, (isReplay) ? 9 : 3);
             counter = controlMouse.checkMouse(user, window);
             // if (counter > user.numButtons) counter = 9;
             glfwSwapBuffers(window); // swap the color buffers

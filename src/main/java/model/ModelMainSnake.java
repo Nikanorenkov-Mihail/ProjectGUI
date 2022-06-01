@@ -26,11 +26,11 @@ public class ModelMainSnake {
         this.withReplays = withReplays;
     }
 
-    public void gameOrReplay(boolean isReplay, ModelUser user) {
+    public void gameOrReplay(boolean isReplay, ModelUser user, boolean isItTest) {
         if (isReplay) {
-            Replays replay = new Replays(gridHeight, gridWidth);
 
-            replay.watchReplayForStr(user.numberOfReplay); // тут номер реплея
+            Replays replay = new Replays(gridHeight, gridWidth);
+            replay.watchReplayForStr(user.numberOfReplay, isItTest); // тут номер реплея
 
             this.allWays = replay.allWays;
             //функция задает змейке, в которой будут все записанные стены, бонусы и передвижения

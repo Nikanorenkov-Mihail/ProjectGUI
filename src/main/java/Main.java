@@ -23,7 +23,9 @@ public class Main {
         ModelMainSnake changeModel = new ModelMainSnake(gridHeight, gridWidth, withReplays);
         ControllerMouse controlMouse = new ControllerMouse(user, cellSize, gridHeight, gridWidth);
         Controller controller = new Controller(changeModel, delayForController); ///////////////
-        Display helloGL = new Display(windowWidth, windowHeight, gridWidth, gridHeight, "Snake", cellSize, withReplays, delayForController, styleGridWithGrid, glDraw, user, controlMouse, changeModel, controller);
+        Display helloGL = new Display(windowWidth, windowHeight, gridWidth, gridHeight, "Snake",
+                cellSize, withReplays, delayForController, styleGridWithGrid,
+                glDraw, user, controlMouse, changeModel, controller, false);
         helloGL.run();
     }
 }

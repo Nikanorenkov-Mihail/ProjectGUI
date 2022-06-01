@@ -124,7 +124,7 @@ public class GlDraw {
     }
 
     public void askUserLevelInButton11(ModelUser user, int size, int indexImage) {
-        glColor3f(.0f, 1.0f, 0.0f);
+        glColor3f(0.0f, 1.0f, 0.0f);
 
         for (int i = 0; i < size; i++) {
             glBegin(GL_LINE_LOOP); // отрисовка кнопок
@@ -134,22 +134,9 @@ public class GlDraw {
             glVertex2f(convertX(user.numMasButton[i].x3), convertY(user.numMasButton[i].y3));
             glVertex2f(convertX(user.numMasButton[i].x4), convertY(user.numMasButton[i].y4));
             glEnd();
-            drawSMTH(user, indexImage);
+            //drawSMTH(user, indexImage);
         }
         //glColor3f(0.0f, 0.0f, 0.0f);
-    }
-
-    public void askUserLevelInButton(Button @NotNull [] user) {
-        //glColor3f(1.0f, 0.0f, 0.0f);
-        for (int i = 0; i < user.length; i++) {
-            glBegin(GL_LINE_LOOP); // отрисовка кнопок
-
-            glVertex2f(convertX(user[i].x1), convertY(user[i].y1));
-            glVertex2f(convertX(user[i].x2), convertY(user[i].y2));
-            glVertex2f(convertX(user[i].x3), convertY(user[i].y3));
-            glVertex2f(convertX(user[i].x4), convertY(user[i].y4));
-            glEnd();
-        }
     }
 
     public void drawGame(boolean styleGridWithGrid, ModelMainSnake changeForReplay) {
@@ -160,7 +147,11 @@ public class GlDraw {
         drawSnake(changeForReplay);
     }
 
-
+    /**
+     * Метод задания тексур
+     * @param index индекс текстуры
+     * @return путь к тексуре
+     */
     private BufferedImage setTexture(int index) {
         switch (index) {
             case 1:
@@ -248,12 +239,12 @@ public class GlDraw {
 
     private void drawImage(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int index) {
         BufferedImage im = setTexture(index);
-        int id = Texture.loadTexture(im);
-         //id = Texture.masImages[(index-1)];
+   //     int id = Texture.loadTexture(im);
+        // int id = Texture.masImages[(index-1)];
         System.out.println(index);
         //BufferedImage im = setTexture(index);
         //int id = texture.masImages[index];
-        glBindTexture(GL_TEXTURE_2D, id);
+     //   glBindTexture(GL_TEXTURE_2D, id);
         glBegin(GL_QUADS);
 
         glTexCoord2f(0, 0);
@@ -269,7 +260,7 @@ public class GlDraw {
         glVertex2d(convertX(x4), convertY(y4));
 
         glEnd();
-        glDeleteTextures(id);
+        //glDeleteTextures(id);
     }
 
 

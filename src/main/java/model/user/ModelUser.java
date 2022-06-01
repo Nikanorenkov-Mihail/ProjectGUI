@@ -47,6 +47,10 @@ public class ModelUser { // Модель пользователя для инт�
         return numberOfReplay > 0 && numberOfReplay <= Replays.numberOfReplays();
     }
 
+    public static boolean isRightNumberTest(int numberOfReplay) {
+        return numberOfReplay > 0 && numberOfReplay <= Replays.numberOfReplaysTest();
+    }
+
     public void whatButtonInStart(@NotNull ModelUser user) {
         switch (user.button) {
             case (1):
