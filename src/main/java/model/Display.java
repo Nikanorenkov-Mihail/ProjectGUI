@@ -148,7 +148,7 @@ public class Display {
             //glColor3f(0.0f, 0.0f, 0.0f);
 
 
-            // Texture.imageIn1();
+
 
             // Tests
             if (isItTest) {
@@ -327,6 +327,13 @@ public class Display {
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             //glColor3f(1.0f, 0.0f, 0.0f);
+
+
+
+            //Texture texture1 = new Texture("InputPNG/1.txt", 0, gridHeight,gridWidth);
+
+
+
 
             glDraw.askUserLevelInButton11(user, user.numButtons, (isReplay) ? 9 : 3);
             counter = controlMouse.checkMouse(user, window);

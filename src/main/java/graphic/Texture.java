@@ -21,29 +21,22 @@ public class Texture {
     public static int[] masImages = new int[sizeOfImageDirectory()];
 
 
-    private final int texture;
+    //private final int texture;
 
-    private final int index;
-
-    /**
-     * Конструктор текстуры
-     * @param way путь к файлу .png с текстурой
-     * @param index слот ячейки текстуры
-     * @param width ширина текстуры в пикселях
-     * @param height высота текстуры в пикселях
-     */
-
-    public Texture(String way, int index, int height,int width) {
+    //private final int index;
 
 
 
+   // public Texture(String way, int index, int height,int width) {
+
+
+/*
         this.index = index;
         texture = glGenTextures();
         //System.out.println(texture);
        // glActiveTexture(GL_TEXTURE0 + index);
 
-        glActiveTexture(GL_TEXTURE0 + index);
-        glBindTexture(GL_TEXTURE_2D, texture);
+       bind();
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -86,12 +79,17 @@ public class Texture {
 
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+    public void bind() {
+        glActiveTexture(GL_TEXTURE0 + index);
+        glBindTexture(GL_TEXTURE_2D, texture);
+    }
+*/
 
 
-/*
-            BufferedImage im = loadImage(way);
 
-        //public static int loadTexture (@NotNull BufferedImage im){
+
+        public static int loadTexture(int index){
+            BufferedImage im = setTexture(index);
             int[] pixels = new int[im.getWidth() * im.getHeight()];
             pixels = im.getRGB(0, 0, im.getWidth(), im.getHeight(), pixels, 0, im.getWidth());
 
@@ -118,10 +116,10 @@ public class Texture {
 
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, im.getWidth(), im.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
-           // return textureID;
+            return textureID;
 
-       // }
-    }*/
+
+    }
 
 
     public static @Nullable BufferedImage loadImage(String loc) {
@@ -138,13 +136,10 @@ public class Texture {
     private static BufferedImage setTexture(int index) {
         switch (index) {
             case 1:
-                return loadImage("InputPNG/1.jpg");
-            case 2:
-                return loadImage("InputPNG/2.jpg");
             case 3:
-                return loadImage("InputPNG/3.jpg");
             case 4:
-                return loadImage("InputPNG/4.jpg");
+            case 2:
+                return loadImage("InputPNG/1.jpg");
             case 5:
                 return loadImage("InputPNG/5.jpg");
             case 6:

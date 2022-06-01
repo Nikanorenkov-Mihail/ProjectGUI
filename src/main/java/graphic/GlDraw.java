@@ -134,7 +134,7 @@ public class GlDraw {
             glVertex2f(convertX(user.numMasButton[i].x3), convertY(user.numMasButton[i].y3));
             glVertex2f(convertX(user.numMasButton[i].x4), convertY(user.numMasButton[i].y4));
             glEnd();
-            //drawSMTH(user, indexImage);
+            drawSMTH(user, indexImage);
         }
         //glColor3f(0.0f, 0.0f, 0.0f);
     }
@@ -147,50 +147,51 @@ public class GlDraw {
         drawSnake(changeForReplay);
     }
 
-    /**
-     * Метод задания тексур
-     * @param index индекс текстуры
-     * @return путь к тексуре
-     */
-    private BufferedImage setTexture(int index) {
-        switch (index) {
-            case 1:
-                return Texture.loadImage("InputPNG/1.jpg");
-            case 2:
-                return Texture.loadImage("InputPNG/2.jpg");
-            case 3:
-                return Texture.loadImage("InputPNG/3.jpg");
-            case 4:
-                return Texture.loadImage("InputPNG/4.jpg");
-            case 5:
-                return Texture.loadImage("InputPNG/5.jpg");
-            case 6:
-                return Texture.loadImage("InputPNG/6.jpg");
-            case 7:
-                return Texture.loadImage("InputPNG/7.jpg");
-            case 8:
-                return Texture.loadImage("InputPNG/8.jpg");
-            case 9:
-                return Texture.loadImage("InputPNG/9.jpg");
-            case 10:
-                return Texture.loadImage("InputPNG/10.jpg");
-            case 11:
-                return Texture.loadImage("InputPNG/11.jpg");
-        }
-        return Texture.loadImage("InputPNG/11.jpg");
-    }
-
-    /*public void imageIn() {
-        for (int i = 1; i <= Texture.sizeOfImageDirectory(); i++) {
-            BufferedImage im = setTexture(i);
-            int id = Texture.loadTexture(im);
-
-        }
-    }*/
 
     private void drawSMTH(ModelUser user, int indexSmth) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         switch (indexSmth) {
+            case (1): // рисуем кнопки старта (их 4)
+                    drawImage(user.numMasButton[0].x1,
+                            user.numMasButton[0].y1,
+                            user.numMasButton[0].x2,
+                            user.numMasButton[0].y2,
+                            user.numMasButton[user.numButtons-1].x3,
+                            user.numMasButton[user.numButtons-1].y3,
+                            user.numMasButton[user.numButtons-1].x4,
+                            user.numMasButton[user.numButtons-1].y4,
+                            indexSmth);
+                break;
+            case (2):// рисуем кнопки уровня (их 5)
+                    drawImage(user.numMasButton[0].x1,
+                            user.numMasButton[0].y1,
+                            user.numMasButton[0].x2,
+                            user.numMasButton[0].y2,
+                            user.numMasButton[user.numButtons-1].x3,
+                            user.numMasButton[user.numButtons-1].y3,
+                            user.numMasButton[user.numButtons-1].x4,
+                            user.numMasButton[user.numButtons-1].y4,
+                            1 + 4); // добавим кнопки старта
+
+                break;
+            case (3):// рисуем кнопки окончания (их 2)
+                // отличаются тем, что горизонтальные
+                    drawImage(user.numMasButton[0].x1,
+                            user.numMasButton[0].y1,
+                            user.numMasButton[user.numButtons-1].x2,
+                            user.numMasButton[user.numButtons-1].y2,
+                            user.numMasButton[user.numButtons-1].x3,
+                            user.numMasButton[user.numButtons-1].y3,
+                            user.numMasButton[0].x4,
+                            user.numMasButton[0].y4,
+                            1 + 4 + 5); // добавим кнопки старта и уровня
+
+                break;
+            default:
+                break;
+        }
+
+     /*   switch (indexSmth) {
             case (1): // рисуем кнопки старта (их 4)
                 for (int i = 0; i < user.numButtons; i++) {
                     drawImage(user.numMasButton[i].x1,
@@ -232,19 +233,20 @@ public class GlDraw {
                 break;
             default:
                 break;
-        }
+        }*/
 
 
     }
 
     private void drawImage(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int index) {
-        BufferedImage im = setTexture(index);
-   //     int id = Texture.loadTexture(im);
+
+        int id = Texture.loadTexture(index);
         // int id = Texture.masImages[(index-1)];
         System.out.println(index);
         //BufferedImage im = setTexture(index);
         //int id = texture.masImages[index];
-     //   glBindTexture(GL_TEXTURE_2D, id);
+        glBindTexture(GL_TEXTURE_2D, id);
+
         glBegin(GL_QUADS);
 
         glTexCoord2f(0, 0);
@@ -260,7 +262,7 @@ public class GlDraw {
         glVertex2d(convertX(x4), convertY(y4));
 
         glEnd();
-        //glDeleteTextures(id);
+        glDeleteTextures(id);
     }
 
 
