@@ -2,6 +2,9 @@ package controller;
 
 import java.util.LinkedList;
 
+/**
+ * змейка это массив маленьких тел
+ */
 public class SnakeModel {
     public LinkedList<SnakesBody> arrayOfBodys = new LinkedList<>();
 

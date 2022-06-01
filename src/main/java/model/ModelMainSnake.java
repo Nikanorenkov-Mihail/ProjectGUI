@@ -26,6 +26,13 @@ public class ModelMainSnake {
         this.withReplays = withReplays;
     }
 
+    /**
+     *  Модель для игры и реплея одна и та же
+     *  эта функция лишь немного ее меняет в ту или иную сторону
+     * @param isReplay проверка на реплей
+     * @param user пользователь, который общался с начальным интерфейсом
+     * @param isItTest это для тестов
+     */
     public void gameOrReplay(boolean isReplay, ModelUser user, boolean isItTest) {
         if (isReplay) {
 
@@ -121,6 +128,10 @@ public class ModelMainSnake {
         isNewWayNotSnake();
     }
 
+    /**
+     * функция принимает команду извне
+     * @param newWay команда для модели
+     */
     private void way(int newWay) {
         switch (newWay) {
             case (0): // up
@@ -181,6 +192,9 @@ public class ModelMainSnake {
 
     }
 
+    /**
+     * много функций для изменения и проверки правильности передвижения змейки
+     */
     private void wayInMe() {
 
         newWayForAllBodys();

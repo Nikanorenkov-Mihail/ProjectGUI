@@ -30,6 +30,13 @@ public class Replays {
         nameForReplayFile = searchNewNameForReplayFile();
     }
 
+    /**
+     * параметры записываются в файл реплея
+     *
+     * @param withWalls будут ли стены в игре
+     * @param walls массив стен
+     * @param bonuses массив бонусов
+     */
     public void writeParameters(boolean withWalls, Wall[] walls, Bonus[] bonuses) {
         if (withWalls) {
             result.append("t ").append(walls.length).append("\n");
@@ -45,6 +52,13 @@ public class Replays {
         result.append("GO").append("\n");
     }
 
+    /**
+     * после параметров идет путь змейки
+     *
+     * дилей меняется автоматически, так как модель в реплее такая-же как и у обычной игры
+     * @param key команда, куда идти
+     * @param delay меняется автоматически
+     */
     public void writeWays(int key, double delay) {
         double currentTime = glfwGetTime();
         if (currentTime - timeForTakts > delay) {
@@ -63,6 +77,12 @@ public class Replays {
         }
     }
 
+    /**
+     * по сути клавиатура контроллера реплея, достает информацию о стенах, бонусах
+     * парсит документ по параметрам и передает в контроллер строку, ее элементы будут идти как команды пользователя
+     * @param numberOfReplay
+     * @param isItTest
+     */
     public void watchReplayForStr(int numberOfReplay, boolean isItTest) {
         if (!ModelUser.isRightNumber(numberOfReplay)) throw new IllegalArgumentException("Wrong number of replay");
         if(isItTest){
@@ -122,6 +142,10 @@ public class Replays {
 
     }
 
+    /**
+     * запарился, эта штука анализирует текущее устройство, чтобы потом придумать имя новому реплею
+     * @return возвращает новый номер (имя файла) реплея
+     */
     private @NotNull String searchNewNameForReplayFile() {
 
         File dir = new File(fileDirectory);
@@ -158,6 +182,10 @@ public class Replays {
         return true;
     }
 
+    /**
+     * статическая функция
+     * @return возвращает количество реплеев на устройтве
+     */
     // пока что реплеев может быть очень много, что-то с этим нужно сделать...
     public static int numberOfReplays() {
         File dir = new File(fileDirectory);

@@ -23,6 +23,11 @@ public class ModelUser { // Модель пользователя для инт�
         this.gridWidth = gridWidth;
     }
 
+    /**
+     * функция временная, каждый раз будет заново создавать кнопки
+     *
+     * @param numForButton создаем нужное количство кнопок
+     */
     public void addButtonsVertical1(int numForButton) {
         numButtons = numForButton;
         for (int i = 0; i < numButtons; i++) {
@@ -33,6 +38,11 @@ public class ModelUser { // Модель пользователя для инт�
         }
     }
 
+    /**
+     * функция временная, каждый раз будет заново создавать кнопки
+     *
+     * @param numForButton создаем нужное количство кнопок
+     */
     public void addButtonsHorizontal1(int numForButton) {
         numButtons = numForButton;
         for (int i = 0; i < numForButton; i++) {
@@ -51,6 +61,10 @@ public class ModelUser { // Модель пользователя для инт�
         return numberOfReplay > 0 && numberOfReplay <= Replays.numberOfReplaysTest();
     }
 
+    /**
+     * принимаем действия пользователя
+     * @param user этого пользователя слушаем
+     */
     public void whatButtonInStart(@NotNull ModelUser user) {
         switch (user.button) {
             case (1):

@@ -2,6 +2,10 @@ package controller;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * самое главное в змейке - ее тело
+ * а если тел много...
+ */
 public class SnakesBody {
     public int x;
     public int y;

@@ -19,6 +19,11 @@ public class Controller {
 
     }
 
+    /**
+     * сам контроллер
+     * @param window1 где все дело происходит
+     * @return команда
+     */
     public int control(long window1) {
         if (pauseControl) {
             if (glfwGetKey(window1, GLFW_KEY_O) == GLFW_PRESS) pauseStop();
@@ -37,6 +42,10 @@ public class Controller {
         return change.lastWay;
     }
 
+    /**
+     * таймер для хода
+     * @return пора или нет, куда-то идти
+     */
     public boolean isTimeToChangeWay() {
         double currentTime = glfwGetTime();
         if (currentTime - lastTime > delay) {

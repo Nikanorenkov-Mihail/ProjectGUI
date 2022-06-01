@@ -23,6 +23,9 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
+/**
+ * все действия происходят тут
+ */
 public class Display {
 
     // какие-то настройки игры, задаются в main
@@ -133,22 +136,14 @@ public class Display {
     }
 
     private void loop() {
-        // Texture new1 = new Texture("InputPNG/1.png", 0, width, height);
-        // System.out.println(new1);
 
-
-        while (!glfwWindowShouldClose(window)) {
+             while (!glfwWindowShouldClose(window)) {
 
             GL.createCapabilities();
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
             //glColor3f(0.0f,0.0f,0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            //glColor3f(0.0f, 0.0f, 0.0f);
-
-
-
 
             // Tests
             if (isItTest) {
@@ -219,25 +214,13 @@ public class Display {
     }
     // на каждое действие после выбора пользователя новое окно(сцена)
 
-
-  /*  private void drawGrid(GameGrid grid) {
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
-                if(grid.getTile(x, y) == 0) continue;
-                drawImage(y, x, grid.getTile(x, y));
-            }
-        }
-    }
-
-    private double convertX(double cord) {
-        return -1 + (cord * tileSize) / (windowSize / 2.0);
-    }
-
-    private double convertY(double cord) {
-        return 1 - (tileSize * cord) / (windowSize / 2.0);
-    }*/
-
-
+    /**
+     *  в этом окне происходит действие игры
+     * @param change модель
+     * @param glDraw отрисовка
+     * @param controller контроллер
+     *                   все разделено
+     */
     private void windowWithGame(ModelMainSnake change, GlDraw glDraw, Controller controller) {
         Replays replay = new Replays(gridHeight, gridWidth);
         if (withReplays) {
@@ -258,6 +241,13 @@ public class Display {
         }
     }
 
+    /**
+     *  в этом окне происходит показ реплея
+     * @param changeForReplay модель реплея
+     * @param glDraw отрисовка
+     * @param controllerForReplays контроллер
+     *                             все разделено
+     */
     private void windowWithReplay(@NotNull ModelMainSnake changeForReplay, GlDraw glDraw, @NotNull Controller controllerForReplays) {
         controllerForReplays.whatWayInReplay(changeForReplay.allWays);
         while (!glfwWindowShouldClose(window)) { // Окно реплея
@@ -277,6 +267,17 @@ public class Display {
         }
     }
 
+    /**
+     * тут мы спрашиваем пользователя, просим куда-нибудь тыкнуть, сделать выбор
+     * в данном случае выбор вертикальный
+     *
+     * @param arg в зависимости от этого меняем модель пользователя
+     * @param glDraw отрисовка
+     * @param user сам юзер, его модель
+     * @param controlMouse контроллер мышки, для тыкания пользователем по кнопкам
+     * @param numOfButtons количество кнопок
+     * @param isForLevel важно для отрисовки
+     */
     private void windowUserInterfaceVerticalButton(int arg, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse, int numOfButtons, boolean isForLevel) {
 
         user.addButtonsVertical1(numOfButtons);
@@ -318,6 +319,16 @@ public class Display {
         }
     }
 
+    /**
+     * тут мы спрашиваем пользователя, просим куда-нибудь тыкнуть, сделать выбор
+     * в данном случае выбор горизонтальный
+     *
+     * @param arg в зависимости от этого меняем модель пользователя
+     * @param glDraw отрисовка
+     * @param user сам юзер, его модель
+     * @param controlMouse контроллер мышки, для тыкания пользователем по кнопкам
+     * @param numOfButtons количество кнопок
+     */
     private void windowUserInterfaceHorizontalButton(int arg, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse, int numOfButtons, boolean isReplay) {
         // !!!!!!!!!! сделать красивый экран окончания
 
@@ -364,6 +375,10 @@ public class Display {
         }
     }
 
+    /**
+     * функция позволяет в конце игры продолжить заниматься любимым делом - играть в Змейку
+     * просто берет и заново создает модель, контроллеры, отрисовку
+     */
     private void toStartValue() {
         System.out.println(gridHeight + " " + gridWidth);
         user = new ModelUser(gridHeight, gridWidth);
@@ -371,8 +386,7 @@ public class Display {
         controlMouse = new ControllerMouse(user, cellSize, gridHeight, gridWidth);
         controller = new Controller(changeModel, delayForController);
 
-
         glEnd();
-        System.out.println(changeModel.gridHeight + " " + changeModel.gridWidth);
+        //System.out.println(changeModel.gridHeight + " " + changeModel.gridWidth);
     }
 }

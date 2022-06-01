@@ -124,6 +124,18 @@ public class GlDraw {
         glEnd();
     }
 
+    /**
+     *
+     * @param user текущий пользователь, что работает с интерфейсом
+     * @param size количество кнопок
+     * @param indexImage индекс текстуры
+     *  index:
+     *                   1 - начальный экран
+     *                   2 - выбор уровня со стенами
+     *                   3 - экран окончания
+     *                   9 - ничего не выводим
+     */
+
     public void askUserLevelInButton11(ModelUser user, int size, int indexImage) {
         glColor3f(0.0f, 1.0f, 0.0f);
 
@@ -135,13 +147,18 @@ public class GlDraw {
             glVertex2f(convertX(user.numMasButton[i].x3), convertY(user.numMasButton[i].y3));
             glVertex2f(convertX(user.numMasButton[i].x4), convertY(user.numMasButton[i].y4));
             glEnd();
-            
+
             //если выключить работать будет приятнее
             if (indexImage != 9) drawSMTH(user, indexImage);
         }
         //glColor3f(0.0f, 0.0f, 0.0f);
     }
 
+    /**
+     *
+     * @param styleGridWithGrid решетка в клеточку
+     * @param changeForReplay модель, та, что отрисовывается и принимает от контроллера команды
+     */
     public void drawGame(boolean styleGridWithGrid, ModelMainSnake changeForReplay) {
         if (styleGridWithGrid) drawGrid();
         drawWalls(changeForReplay.masOfWalls);
@@ -150,7 +167,12 @@ public class GlDraw {
         drawSnake(changeForReplay);
     }
 
-
+    /**
+     * функция текстур
+     * без нее, к сожалению, все работает гораздо быстрее
+     * @param user смотрим, сколько кнопок, чтобы понимать размеры кнопок
+     * @param indexSmth индекс текстуры для отрисовки
+     */
     private void drawSMTH(ModelUser user, int indexSmth) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         switch (indexSmth) {
@@ -241,9 +263,22 @@ public class GlDraw {
 
     }
 
+    /**
+     * очень хочется сделать так, чтобы не нужно было загружать постоянно текстуры
+     * но, не получается что-то активировать...
+     * @param x1 координата
+     * @param y1 координата
+     * @param x2 координата
+     * @param y2 координата
+     * @param x3 координата
+     * @param y3 координата
+     * @param x4 координата
+     * @param y4 координата
+     * @param index индекс текстуры
+     */
     private void drawImage(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int index) {
 
-        int id = Texture.loadTexture(index);
+        int id = Texture.Texture(index);
 
         // int id = Texture.masImages[(index-1)];
         System.out.println(index);
