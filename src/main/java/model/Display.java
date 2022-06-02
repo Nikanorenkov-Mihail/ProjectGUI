@@ -137,12 +137,12 @@ public class Display {
 
     private void loop() {
 
-             while (!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window)) {
 
             GL.createCapabilities();
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
-            //glColor3f(0.0f,0.0f,0.0f);
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Tests
@@ -186,7 +186,7 @@ public class Display {
                         } catch (IllegalArgumentException e) {
                             System.out.println("Game over Your score: " + ((changeModel.nowBonus == 0) ? 1 : changeModel.nowBonus * 5));
                         }
-                        // !!!!!!!!!! сделать красивый экран окончания
+
                     }
                 } else {
                     if (user.button == 2) {
@@ -215,9 +215,10 @@ public class Display {
     // на каждое действие после выбора пользователя новое окно(сцена)
 
     /**
-     *  в этом окне происходит действие игры
-     * @param change модель
-     * @param glDraw отрисовка
+     * в этом окне происходит действие игры
+     *
+     * @param change     модель
+     * @param glDraw     отрисовка
      * @param controller контроллер
      *                   все разделено
      */
@@ -242,9 +243,10 @@ public class Display {
     }
 
     /**
-     *  в этом окне происходит показ реплея
-     * @param changeForReplay модель реплея
-     * @param glDraw отрисовка
+     * в этом окне происходит показ реплея
+     *
+     * @param changeForReplay      модель реплея
+     * @param glDraw               отрисовка
      * @param controllerForReplays контроллер
      *                             все разделено
      */
@@ -257,7 +259,6 @@ public class Display {
             if (!controllerForReplays.pauseControl && controllerForReplays.isTimeToChangeWay()) {
                 changeForReplay.lastWay = controllerForReplays.controllerForReplays(window);
                 changeForReplay.newWay();// говорим змейке двигаться в нужный delay без паузы
-                // System.out.println(changeForReplay.lastWay);
             }
 
             glfwSwapBuffers(window); // swap the color buffers
@@ -271,12 +272,12 @@ public class Display {
      * тут мы спрашиваем пользователя, просим куда-нибудь тыкнуть, сделать выбор
      * в данном случае выбор вертикальный
      *
-     * @param arg в зависимости от этого меняем модель пользователя
-     * @param glDraw отрисовка
-     * @param user сам юзер, его модель
+     * @param arg          в зависимости от этого меняем модель пользователя
+     * @param glDraw       отрисовка
+     * @param user         сам юзер, его модель
      * @param controlMouse контроллер мышки, для тыкания пользователем по кнопкам
      * @param numOfButtons количество кнопок
-     * @param isForLevel важно для отрисовки
+     * @param isForLevel   важно для отрисовки
      */
     private void windowUserInterfaceVerticalButton(int arg, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse, int numOfButtons, boolean isForLevel) {
 
@@ -285,13 +286,10 @@ public class Display {
 
         while (counter == 9) { // Окно выбора уровня игры
 
-
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-            //glColor3f(1.0f, 0.0f, 0.0f);
-
             counter = controlMouse.checkMouse(user, window);
-            //   if (counter >= user.numButtons) counter = 9;
+
             glDraw.askUserLevelInButton11(user, user.numButtons, (isForLevel) ? 2 : 1);
 
             glfwSwapBuffers(window); // swap the color buffers
@@ -323,14 +321,14 @@ public class Display {
      * тут мы спрашиваем пользователя, просим куда-нибудь тыкнуть, сделать выбор
      * в данном случае выбор горизонтальный
      *
-     * @param arg в зависимости от этого меняем модель пользователя
-     * @param glDraw отрисовка
-     * @param user сам юзер, его модель
+     * @param arg          в зависимости от этого меняем модель пользователя
+     * @param glDraw       отрисовка
+     * @param user         сам юзер, его модель
      * @param controlMouse контроллер мышки, для тыкания пользователем по кнопкам
      * @param numOfButtons количество кнопок
      */
     private void windowUserInterfaceHorizontalButton(int arg, GlDraw glDraw, @NotNull ModelUser user, ControllerMouse controlMouse, int numOfButtons, boolean isReplay) {
-        // !!!!!!!!!! сделать красивый экран окончания
+
 
         user.addButtonsHorizontal1(numOfButtons);
         int counter = 9;
@@ -338,20 +336,16 @@ public class Display {
         while (counter == 9) { // Окно выбора уровня игры
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-            //glColor3f(1.0f, 0.0f, 0.0f);
-
-
-
-            //Texture texture1 = new Texture("InputPNG/1.txt", 0, gridHeight,gridWidth);
-
-
-
 
             glDraw.askUserLevelInButton11(user, user.numButtons, (isReplay) ? 9 : 3);
             counter = controlMouse.checkMouse(user, window);
-            // if (counter > user.numButtons) counter = 9;
-            glfwSwapBuffers(window); // swap the color buffers
 
+            // уюирать текстуру картинку тут
+            //glDraw.drawImage(35,85,45,85, 45,80,35,80, 13);
+            glDraw.drawImage(35, 10, 45, 10, 45, 5, 35, 5, 12);
+
+
+            glfwSwapBuffers(window); // swap the color buffers
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();

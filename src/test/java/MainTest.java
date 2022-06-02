@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class MainTest {
+    // игровые параметры
     /*    private static int gridHeight = 40;
         private static int gridWidth = 80;
         private static int cellSize = 20;

@@ -22,26 +22,11 @@ public class Texture {
 
     /**
      * загружаем и активируем текстуру
+     *
      * @param index индекст текстуры
      * @return индекс текстуры
      */
     public static int Texture(int index) {
-        BufferedImage im = setTexture(index);
-        int[] pixels = new int[im.getWidth() * im.getHeight()];
-        pixels = im.getRGB(0, 0, im.getWidth(), im.getHeight(), pixels, 0, im.getWidth());
-
-        ByteBuffer buffer = BufferUtils.createByteBuffer(im.getHeight() * im.getWidth() * BYTES_PER_PIXEL);
-        for (int y = 0; y < im.getHeight(); y++) {
-            for (int x = 0; x < im.getWidth(); x++) {
-                int pixel = pixels[y * im.getWidth() + x];
-                buffer.put((byte) ((pixel >> 16) & 0xff)); // Красный
-                buffer.put((byte) ((pixel >> 8) & 0xff)); // Зеленый
-                buffer.put((byte) ((pixel & 0xff))); // Синий
-                buffer.put((byte) ((pixel >> 24) & 0xff)); // Альфа - прозрачность
-            }
-        }
-        buffer.flip();
-
         int textureID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, textureID);
 
@@ -51,8 +36,25 @@ public class Texture {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, im.getWidth(), im.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-        //System.out.println(im.getHeight() +"  "+ im.getWidth());
+        BufferedImage image = setTexture(index);
+        int[] pixels = new int[image.getWidth() * image.getHeight()];
+        pixels = image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+
+        ByteBuffer buffer = BufferUtils.createByteBuffer(image.getHeight() * image.getWidth() * BYTES_PER_PIXEL);
+        for (int y = 0; y < image.getHeight(); y++) {
+            for (int x = 0; x < image.getWidth(); x++) {
+                int pixel = pixels[y * image.getWidth() + x];
+                buffer.put((byte) ((pixel >> 16) & 0xff)); // Красный
+                buffer.put((byte) ((pixel >> 8) & 0xff)); // Зеленый
+                buffer.put((byte) ((pixel & 0xff))); // Синий
+                buffer.put((byte) ((pixel >> 24) & 0xff)); // Альфа - прозрачность
+            }
+        }
+        buffer.flip();
+
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        //System.out.println(image.getHeight() +"  "+ image.getWidth());
         return textureID;
 
 
@@ -60,12 +62,12 @@ public class Texture {
 
     /**
      * загружаем изображение
+     *
      * @param path путь к текстуре
      * @return изображение загружено
      */
     public static @Nullable BufferedImage loadImage(String path) {
         try {
-
             return ImageIO.read(new File(path));
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,6 +77,7 @@ public class Texture {
 
     /**
      * понимаем, где какая текстура
+     *
      * @param index где лежит текстура по индексу
      * @return возвращаем изображение
      */
@@ -94,12 +97,17 @@ public class Texture {
             case 10:
             case 11:
                 return loadImage("InputPNG/3.jpg");
+            case 12:
+                return loadImage("InputPNG/cat.jpg");
+            case 13:
+                return loadImage("InputPNG/cat2.jpg");
         }
         return loadImage("InputPNG/11.jpg");
     }
 
     /**
      * на всякий случай проверим количество элементов в директории
+     *
      * @return возвращаем количество элементов в директории
      */
     public static int sizeOfImageDirectory() {

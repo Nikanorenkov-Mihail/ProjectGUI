@@ -34,8 +34,8 @@ public class Replays {
      * параметры записываются в файл реплея
      *
      * @param withWalls будут ли стены в игре
-     * @param walls массив стен
-     * @param bonuses массив бонусов
+     * @param walls     массив стен
+     * @param bonuses   массив бонусов
      */
     public void writeParameters(boolean withWalls, Wall[] walls, Bonus[] bonuses) {
         if (withWalls) {
@@ -54,9 +54,10 @@ public class Replays {
 
     /**
      * после параметров идет путь змейки
-     *
+     * <p>
      * дилей меняется автоматически, так как модель в реплее такая-же как и у обычной игры
-     * @param key команда, куда идти
+     *
+     * @param key   команда, куда идти
      * @param delay меняется автоматически
      */
     public void writeWays(int key, double delay) {
@@ -80,13 +81,15 @@ public class Replays {
     /**
      * по сути клавиатура контроллера реплея, достает информацию о стенах, бонусах
      * парсит документ по параметрам и передает в контроллер строку, ее элементы будут идти как команды пользователя
+     *
      * @param numberOfReplay
      * @param isItTest
      */
     public void watchReplayForStr(int numberOfReplay, boolean isItTest) {
         if (!ModelUser.isRightNumber(numberOfReplay)) throw new IllegalArgumentException("Wrong number of replay");
-        if(isItTest){
-            if (!ModelUser.isRightNumberTest(numberOfReplay)) throw new IllegalArgumentException("Wrong number of replay");
+        if (isItTest) {
+            if (!ModelUser.isRightNumberTest(numberOfReplay))
+                throw new IllegalArgumentException("Wrong number of replay");
 
         }
         try {
@@ -144,6 +147,7 @@ public class Replays {
 
     /**
      * запарился, эта штука анализирует текущее устройство, чтобы потом придумать имя новому реплею
+     *
      * @return возвращает новый номер (имя файла) реплея
      */
     private @NotNull String searchNewNameForReplayFile() {
@@ -184,6 +188,7 @@ public class Replays {
 
     /**
      * статическая функция
+     *
      * @return возвращает количество реплеев на устройтве
      */
     // пока что реплеев может быть очень много, что-то с этим нужно сделать...

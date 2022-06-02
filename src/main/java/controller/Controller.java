@@ -21,6 +21,7 @@ public class Controller {
 
     /**
      * сам контроллер
+     *
      * @param window1 где все дело происходит
      * @return команда
      */
@@ -44,6 +45,7 @@ public class Controller {
 
     /**
      * таймер для хода
+     *
      * @return пора или нет, куда-то идти
      */
     public boolean isTimeToChangeWay() {

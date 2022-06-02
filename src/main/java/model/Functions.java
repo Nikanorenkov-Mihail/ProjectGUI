@@ -1,4 +1,5 @@
 package model;
+
 import controller.SnakesBody;
 import org.jetbrains.annotations.NotNull;
 

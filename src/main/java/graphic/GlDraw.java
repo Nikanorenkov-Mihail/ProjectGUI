@@ -3,14 +3,9 @@ package graphic;
 import model.Bonus;
 import model.Wall;
 import model.ModelMainSnake;
-import model.user.Button;
 import model.user.ModelUser;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL12;
 
-import java.awt.image.BufferedImage;
-
-import static graphic.Texture.sizeOfImageDirectory;
 import static java.lang.Math.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -125,11 +120,10 @@ public class GlDraw {
     }
 
     /**
-     *
-     * @param user текущий пользователь, что работает с интерфейсом
-     * @param size количество кнопок
+     * @param user       текущий пользователь, что работает с интерфейсом
+     * @param size       количество кнопок
      * @param indexImage индекс текстуры
-     *  index:
+     *                   index:
      *                   1 - начальный экран
      *                   2 - выбор уровня со стенами
      *                   3 - экран окончания
@@ -155,9 +149,8 @@ public class GlDraw {
     }
 
     /**
-     *
      * @param styleGridWithGrid решетка в клеточку
-     * @param changeForReplay модель, та, что отрисовывается и принимает от контроллера команды
+     * @param changeForReplay   модель, та, что отрисовывается и принимает от контроллера команды
      */
     public void drawGame(boolean styleGridWithGrid, ModelMainSnake changeForReplay) {
         if (styleGridWithGrid) drawGrid();
@@ -170,7 +163,8 @@ public class GlDraw {
     /**
      * функция текстур
      * без нее, к сожалению, все работает гораздо быстрее
-     * @param user смотрим, сколько кнопок, чтобы понимать размеры кнопок
+     *
+     * @param user      смотрим, сколько кнопок, чтобы понимать размеры кнопок
      * @param indexSmth индекс текстуры для отрисовки
      */
     private void drawSMTH(ModelUser user, int indexSmth) {
@@ -266,24 +260,21 @@ public class GlDraw {
     /**
      * очень хочется сделать так, чтобы не нужно было загружать постоянно текстуры
      * но, не получается что-то активировать...
-     * @param x1 координата
-     * @param y1 координата
-     * @param x2 координата
-     * @param y2 координата
-     * @param x3 координата
-     * @param y3 координата
-     * @param x4 координата
-     * @param y4 координата
+     *
+     * @param x1    координата
+     * @param y1    координата
+     * @param x2    координата
+     * @param y2    координата
+     * @param x3    координата
+     * @param y3    координата
+     * @param x4    координата
+     * @param y4    координата
      * @param index индекс текстуры
      */
-    private void drawImage(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int index) {
-
+    public void drawImage(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int index) {
         int id = Texture.Texture(index);
 
-        // int id = Texture.masImages[(index-1)];
         System.out.println(index);
-        //BufferedImage im = setTexture(index);
-        //int id = texture.masImages[index];
         glBindTexture(GL_TEXTURE_2D, id);
 
         glBegin(GL_QUADS);

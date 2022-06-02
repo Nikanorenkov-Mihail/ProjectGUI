@@ -27,10 +27,11 @@ public class ModelMainSnake {
     }
 
     /**
-     *  Модель для игры и реплея одна и та же
-     *  эта функция лишь немного ее меняет в ту или иную сторону
+     * Модель для игры и реплея одна и та же
+     * эта функция лишь немного ее меняет в ту или иную сторону
+     *
      * @param isReplay проверка на реплей
-     * @param user пользователь, который общался с начальным интерфейсом
+     * @param user     пользователь, который общался с начальным интерфейсом
      * @param isItTest это для тестов
      */
     public void gameOrReplay(boolean isReplay, ModelUser user, boolean isItTest) {
@@ -130,6 +131,7 @@ public class ModelMainSnake {
 
     /**
      * функция принимает команду извне
+     *
      * @param newWay команда для модели
      */
     private void way(int newWay) {
