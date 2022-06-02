@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import org.jetbrains.annotations.NotNull;
 

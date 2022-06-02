@@ -1,7 +1,5 @@
 package model;
 
-import controller.SnakeModel;
-import controller.SnakesBody;
 import functions.Replays;
 import model.user.ModelUser;
 
